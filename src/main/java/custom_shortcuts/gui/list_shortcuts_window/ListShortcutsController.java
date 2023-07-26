@@ -25,7 +25,7 @@ public class ListShortcutsController {
 	}
 
 	public void displayShortcuts() throws Exception {
-		GridPane gridPane = new GridPane();
+		this.gridPane = new GridPane();
 		ArrayList<String[]> shortcuts = this.sqlController.getAllShortcuts();
 		for (int i=0; i<shortcuts.size(); i++) {
 			FXMLLoader loaderRow = new FXMLLoader(getClass().getResource("OneShortcut.fxml"));
@@ -34,9 +34,9 @@ public class ListShortcutsController {
 			loaderRow.setController(oneShortcutController);
 			GridPane newRow = loaderRow.load();
 			GridPane.setConstraints(newRow, 0, i);
-			gridPane.getChildren().add(newRow);
+			this.gridPane.getChildren().add(newRow);
 		}
-		this.scrollPane.setContent(gridPane);
+		this.scrollPane.setContent(this.gridPane);
 	}
 
 	public void removeRowAtIndex(int index) {
