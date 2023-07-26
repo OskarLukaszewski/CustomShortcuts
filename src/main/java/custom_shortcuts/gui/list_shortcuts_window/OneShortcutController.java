@@ -17,7 +17,7 @@ public class OneShortcutController {
 	private String[] shortcut;
 	private final int id;
 	private final SqlController sqlController;
-	private final ListShortcutsWindow listShortcutsWindow;
+	private final ListShortcutsController listShortcutsController;
 
 	@FXML
 	private TextField nameTextField, parametersTextField;
@@ -45,9 +45,9 @@ public class OneShortcutController {
 	}
 
 	public OneShortcutController(
-			SqlController sqlController, ListShortcutsWindow listShortcutsWindow, String[] shortcut, int id) {
+			SqlController sqlController, ListShortcutsController listShortcutsController, String[] shortcut, int id) {
 		this.sqlController = sqlController;
-		this.listShortcutsWindow = listShortcutsWindow;
+		this.listShortcutsController = listShortcutsController;
 		this.isEditOn = false;
 		this.shortcut = shortcut;
 		this.id = id;
@@ -55,7 +55,7 @@ public class OneShortcutController {
 
 	public void topButtonClick() {
 		if (this.isEditOn) {
-			if (!isDifferent()) {
+			if (isSame()) {
 				setEditable(false);
 				return;
 			}
@@ -90,7 +90,7 @@ public class OneShortcutController {
 
 	public void bottomButtonClick() {
 		if (this.isEditOn) {
-			if (!isDifferent()) {
+			if (isSame()) {
 				setEditable(false);
 				return;
 			}
@@ -116,7 +116,7 @@ public class OneShortcutController {
 			if (option.isPresent() && ButtonType.OK.equals(option.get())) {
 				try {
 					this.sqlController.deleteShortcut(this.shortcut[0]);
-					this.listShortcutsWindow.hideRow(this.id);
+					this.listShortcutsController.removeRowAtIndex(this.id);
 				} catch (Exception e) {
 					Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 					errorAlert.setHeaderText("Operation failed");
@@ -143,20 +143,20 @@ public class OneShortcutController {
 		}
 	}
 
-	private boolean isDifferent() {
+	private boolean isSame() {
 		if (!this.nameTextField.getText().equals(this.shortcut[0])) {
-			return true;
+			return false;
 		}
 		if (!this.parametersTextField.getText().equals(this.shortcut[1])) {
-			return true;
+			return false;
 		}
-		return !this.bodyTextArea.getText().equals(this.shortcut[2]);
+		return this.bodyTextArea.getText().equals(this.shortcut[2]);
 	}
 
 	private void setOnFocus(Node node) {
 		node.focusedProperty().addListener((observableValue, oldValue, newValue) -> {
 			if (newValue && !this.isEditOn) {
-				this.listShortcutsWindow.setFocus();
+				this.listShortcutsController.setFocus();
 			}
 		});
 	}
