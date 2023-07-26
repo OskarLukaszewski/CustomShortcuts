@@ -19,6 +19,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
+import java.io.File;
+
 import static custom_shortcuts.gui.main_window.CustomShortcuts.getIcon;
 
 public class MainController {
@@ -69,8 +71,8 @@ public class MainController {
 	public MainController(Stage stage) {
 		this.mainStage = stage;
 		this.hideShowAnimation = new HideShowAnimation(this.mainStage);
-		this.sqlController = new SqlController(
-				"jdbc:sqlite:shortcuts.db");
+		File dataFolder = createDataFolder();
+		this.sqlController = new SqlController("jdbc:sqlite:" + dataFolder.getPath() + "\\shortcuts.db");
 		this.addShortcutWindow = new AddShortcutWindow(this.sqlController);
 		this.screenshotWindow = new ScreenshotWindow(this.sqlController);
 		this.listShortcutsWindow = new ListShortcutsWindow(this.sqlController);
@@ -118,5 +120,21 @@ public class MainController {
 			stage.getIcons().add(getIcon());
 			errorAlert.showAndWait();
 		}
+	}
+
+	private File createDataFolder() {
+		File dataFile = new File(System.getenv("APPDATA") + "\\CustomShortcuts");
+		if(!dataFile.exists()) {
+			if (!dataFile.mkdir()) {
+				Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+				errorAlert.setHeaderText("Application cannot be opened.");
+				errorAlert.setContentText("Failed to create a data folder at" + dataFile.getPath() + ".");
+				Stage stage2 = (Stage) errorAlert.getDialogPane().getScene().getWindow();
+				stage2.getIcons().add(getIcon());
+				errorAlert.showAndWait();
+				Platform.exit();
+			}
+		}
+		return dataFile;
 	}
 }

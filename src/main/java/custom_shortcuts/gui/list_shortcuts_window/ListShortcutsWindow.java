@@ -44,7 +44,6 @@ public class ListShortcutsWindow {
 			this.isOpened = true;
 		} catch (Exception e) {
 			this.isOpened = false;
-			e.printStackTrace();
 			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 			errorAlert.setHeaderText("Window cannot be opened");
 			errorAlert.setContentText(e.getMessage());
