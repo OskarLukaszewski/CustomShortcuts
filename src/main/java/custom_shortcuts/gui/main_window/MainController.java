@@ -81,7 +81,7 @@ public class MainController {
 					this.movedAwayFromEdge = true;
 				}
 			} else {
-				this.moveRectangleHoldClockService.stopService();
+				this.moveRectangleHoldClockService.startService();
 			}
 		});
 		this.moveRectangle.setOnMouseReleased(mouseEvent -> {
