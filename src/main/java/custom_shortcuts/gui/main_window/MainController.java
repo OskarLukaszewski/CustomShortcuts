@@ -72,11 +72,12 @@ public class MainController {
 			this.mainStage.setY(mouseEvent.getScreenY() - this.yOffset);
 			if (this.fullyDraggable) {
 				this.mainStage.setX(mouseEvent.getScreenX() - this.xOffset);
-				if (this.mainStage.getX() + this.mainStage.getWidth() >= Screen.getPrimary().getBounds().getWidth()
-						&& this.movedAwayFromEdge) {
+				if (this.movedAwayFromEdge &&
+						this.mainStage.getX() + this.mainStage.getWidth() >=
+						Screen.getPrimary().getBounds().getWidth()) {
 					setDraggable(false);
 				}
-				if (Screen.getPrimary().getBounds().getWidth() - this.mainStage.getX() >
+				if (!this.movedAwayFromEdge && Screen.getPrimary().getBounds().getWidth() - this.mainStage.getX() >
 						this.mainStage.getWidth() + 10) {
 					this.movedAwayFromEdge = true;
 				}
