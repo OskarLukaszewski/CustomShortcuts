@@ -58,7 +58,7 @@ public class MainController {
 			this.moveRectangle.setFill(Color.WHITE);
 			this.yOffset = mouseEvent.getSceneY();
 		});
-		this.moveRectangle.setOnMouseDragged(mouseEvent -> this.mainStage.setY(mouseEvent.getScreenY() - yOffset));
+		this.moveRectangle.setOnMouseDragged(mouseEvent -> this.mainStage.setY(mouseEvent.getScreenY() - this.yOffset));
 		this.moveRectangle.setOnMouseReleased(mouseEvent -> this.moveRectangle.setFill(Color.web("#dddddd")));
 		this.shortcutTextField.setOnKeyPressed(keyEvent -> {
 			if (keyEvent.getCode().equals(KeyCode.ENTER)) {
