@@ -13,11 +13,12 @@ public class HideShowAnimation {
 
 	private final Stage mainStage;
 	private FontAwesomeIconView hideIcon;
-	private boolean isPlaying, isHidden;
+	private boolean isPlaying, isHidden, fullyDraggable;
 
 	public HideShowAnimation(Stage stage) {
 		this.isPlaying = false;
 		this.isHidden = false;
+		this.fullyDraggable = false;
 		this.mainStage = stage;
 	}
 
@@ -30,6 +31,10 @@ public class HideShowAnimation {
 		} else {
 			playHideShowAnimation(new Double[] {30d, this.mainStage.getX() + 200});
 		}
+	}
+
+	public void setFullyDraggable(boolean fullyDraggable) {
+		this.fullyDraggable = fullyDraggable;
 	}
 
 	private void playHideShowAnimation(Double[] endValues) {
@@ -51,6 +56,15 @@ public class HideShowAnimation {
 		KeyValue kvWidth = new KeyValue(writableWidth, endValues[0]);
 		KeyFrame kfWidth = new KeyFrame(Duration.millis(1500), kvWidth);
 		timelineWidth.getKeyFrames().addAll(kfWidth);
+		timelineWidth.setOnFinished(actionEvent -> {
+			this.isHidden = !this.isHidden;
+			if (this.isHidden) {
+				this.hideIcon.setIcon(FontAwesomeIcon.LONG_ARROW_LEFT);
+			} else {
+				this.hideIcon.setIcon(FontAwesomeIcon.LONG_ARROW_RIGHT);
+			}
+			this.isPlaying = false;
+		});
 
 		Timeline timeLineX = new Timeline();
 		WritableValue<Double> writableX = new WritableValue<>() {
@@ -67,22 +81,10 @@ public class HideShowAnimation {
 		KeyValue kvX = new KeyValue(writableX, endValues[1]);
 		KeyFrame kfX = new KeyFrame(Duration.millis(1500), kvX);
 		timeLineX.getKeyFrames().addAll(kfX);
-		timeLineX.setOnFinished(actionEvent -> {
-			this.isHidden = !this.isHidden;
-			if (this.isHidden) {
-				this.hideIcon.setIcon(FontAwesomeIcon.LONG_ARROW_LEFT);
-			} else {
-				this.hideIcon.setIcon(FontAwesomeIcon.LONG_ARROW_RIGHT);
-			}
-			this.isPlaying = false;
-		});
 
-		if (this.isHidden) {
-			timelineWidth.play();
+		timelineWidth.play();
+		if (!this.fullyDraggable) {
 			timeLineX.play();
-		} else {
-			timeLineX.play();
-			timelineWidth.play();
 		}
 	}
 

@@ -137,6 +137,7 @@ public class MainController {
 
 	public void setDraggable(boolean fullyDraggable) {
 		this.fullyDraggable = fullyDraggable;
+		this.hideShowAnimation.setFullyDraggable(fullyDraggable);
 		if (fullyDraggable) {
 			this.moveRectangleIcon.setIcon(FontAwesomeIcon.ARROWS);
 		} else {
