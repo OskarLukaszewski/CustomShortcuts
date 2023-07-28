@@ -3,9 +3,11 @@ package custom_shortcuts.gui.main_window;
 import custom_shortcuts.animations.HideShowAnimation;
 import custom_shortcuts.database.SqlController;
 import custom_shortcuts.functionalities.ShortcutRobot;
+import custom_shortcuts.functionalities.services.MoveRectangleHoldClockService;
 import custom_shortcuts.gui.add_shortcut_window.AddShortcutWindow;
 import custom_shortcuts.gui.list_shortcuts_window.ListShortcutsWindow;
 import custom_shortcuts.gui.screenshot_window.ScreenshotWindow;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -17,6 +19,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -31,8 +34,10 @@ public class MainController {
 	private final ScreenshotWindow screenshotWindow;
 	private final ListShortcutsWindow listShortcutsWindow;
 	private final ShortcutRobot shortcutRobot;
-	private double yOffset = 0;
+	private final MoveRectangleHoldClockService moveRectangleHoldClockService;
+	private double yOffset, xOffset;
 	private final SqlController sqlController;
+	private boolean fullyDraggable, movedAwayFromEdge;
 
 	@FXML
 	private Button hideButton, closeButton, addButton, listButton, locationButton;
@@ -47,7 +52,7 @@ public class MainController {
 	private GridPane mainGridPane;
 
 	@FXML
-	private FontAwesomeIconView hideIcon;
+	private FontAwesomeIconView hideIcon, moveRectangleIcon;
 
 	@FXML
 	private Rectangle moveRectangle;
@@ -57,9 +62,34 @@ public class MainController {
 		this.moveRectangle.setOnMousePressed(mouseEvent -> {
 			this.moveRectangle.setFill(Color.WHITE);
 			this.yOffset = mouseEvent.getSceneY();
+			if (this.fullyDraggable) {
+				this.xOffset = mouseEvent.getSceneX();
+			} else {
+				this.moveRectangleHoldClockService.startService();
+			}
 		});
-		this.moveRectangle.setOnMouseDragged(mouseEvent -> this.mainStage.setY(mouseEvent.getScreenY() - this.yOffset));
-		this.moveRectangle.setOnMouseReleased(mouseEvent -> this.moveRectangle.setFill(Color.web("#dddddd")));
+		this.moveRectangle.setOnMouseDragged(mouseEvent -> {
+			this.mainStage.setY(mouseEvent.getScreenY() - this.yOffset);
+			if (this.fullyDraggable) {
+				this.mainStage.setX(mouseEvent.getScreenX() - this.xOffset);
+				if (this.mainStage.getX() + this.mainStage.getWidth() >= Screen.getPrimary().getBounds().getWidth()
+						&& this.movedAwayFromEdge) {
+					setDraggable(false);
+				}
+				if (Screen.getPrimary().getBounds().getWidth() - this.mainStage.getX() >
+						this.mainStage.getWidth() + 10) {
+					this.movedAwayFromEdge = true;
+				}
+			} else {
+				this.moveRectangleHoldClockService.stopService();
+			}
+		});
+		this.moveRectangle.setOnMouseReleased(mouseEvent -> {
+			this.moveRectangle.setFill(Color.web("#dddddd"));
+			if (!this.fullyDraggable) {
+				this.moveRectangleHoldClockService.stopService();
+			}
+		});
 		this.shortcutTextField.setOnKeyPressed(keyEvent -> {
 			if (keyEvent.getCode().equals(KeyCode.ENTER)) {
 				enterShortcut();
@@ -77,6 +107,11 @@ public class MainController {
 		this.screenshotWindow = new ScreenshotWindow(this.sqlController);
 		this.listShortcutsWindow = new ListShortcutsWindow(this.sqlController);
 		this.shortcutRobot = new ShortcutRobot();
+		this.fullyDraggable = false;
+		this.movedAwayFromEdge = false;
+		this.moveRectangleHoldClockService = new MoveRectangleHoldClockService(this);
+		this.yOffset = 0;
+		this.xOffset = 0;
 	}
 
 	public void hideButtonClick() {
@@ -98,6 +133,17 @@ public class MainController {
 
 	public void locationButtonClick() {
 		this.screenshotWindow.open();
+	}
+
+	public void setDraggable(boolean fullyDraggable) {
+		this.fullyDraggable = fullyDraggable;
+		if (fullyDraggable) {
+			this.moveRectangleIcon.setIcon(FontAwesomeIcon.ARROWS);
+		} else {
+			this.moveRectangleIcon.setIcon(FontAwesomeIcon.ARROWS_V);
+			this.movedAwayFromEdge = false;
+			this.mainStage.setX(Screen.getPrimary().getBounds().getWidth() - this.mainStage.getWidth());
+		}
 	}
 
 	private void enterShortcut() {

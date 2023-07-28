@@ -110,7 +110,7 @@
                   <Insets right="15.0" top="60.0" />
                </StackPane.margin>
             </Rectangle>
-            <FontAwesomeIconView glyphName="ARROWS_V" mouseTransparent="true" scaleY="0.8">
+            <FontAwesomeIconView fx:id="moveRectangleIcon" glyphName="ARROWS_V" mouseTransparent="true" scaleY="0.8">
                <StackPane.margin>
                   <Insets right="15.0" top="62.0" />
                </StackPane.margin>
