@@ -105,7 +105,7 @@ public class MainController {
 		File dataFolder = createDataFolder();
 		this.sqlController = new SqlController("jdbc:sqlite:" + dataFolder.getPath() + "\\shortcuts.db");
 		this.addShortcutWindow = new AddShortcutWindow(this.sqlController);
-		this.screenshotWindow = new ScreenshotWindow(this.sqlController);
+		this.screenshotWindow = new ScreenshotWindow(this.sqlController, this.mainStage);
 		this.listShortcutsWindow = new ListShortcutsWindow(this.sqlController);
 		this.shortcutRobot = new ShortcutRobot();
 		this.fullyDraggable = false;
@@ -133,6 +133,7 @@ public class MainController {
 	}
 
 	public void locationButtonClick() {
+		this.mainStage.setAlwaysOnTop(false);
 		this.screenshotWindow.open();
 	}
 

@@ -2,6 +2,8 @@ package custom_shortcuts.gui.screenshot_window;
 
 import custom_shortcuts.database.SqlController;
 import static custom_shortcuts.gui.main_window.CustomShortcuts.getIcon;
+
+import custom_shortcuts.gui.main_window.MainController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -15,12 +17,13 @@ import java.io.IOException;
 
 public class ScreenshotWindow {
 
-	private final Stage screenshotStage;
+	private final Stage screenshotStage, mainStage;
 	private final ScreenshotController controller;
 	private boolean isOpened;
 
-	public ScreenshotWindow(SqlController sqlController) {
+	public ScreenshotWindow(SqlController sqlController, Stage mainStage) {
 		this.screenshotStage = new Stage();
+		this.mainStage = mainStage;
 		this.screenshotStage.initStyle(StageStyle.UNDECORATED);
 		this.screenshotStage.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
 			if (keyEvent.getCode().equals(KeyCode.ESCAPE)) {
@@ -53,7 +56,10 @@ public class ScreenshotWindow {
 			this.screenshotStage.setScene(scene);
 			this.screenshotStage.setTitle("Custom Shortcuts");
 			this.screenshotStage.getIcons().add(getIcon());
-			this.screenshotStage.setOnCloseRequest(windowEvent -> this.isOpened = false);
+			this.screenshotStage.setOnCloseRequest(windowEvent -> {
+				this.isOpened = false;
+				this.mainStage.setAlwaysOnTop(true);
+			});
 			this.screenshotStage.show();
 			this.isOpened = true;
 		} catch (IOException e) {
@@ -70,5 +76,6 @@ public class ScreenshotWindow {
 	public void close() {
 		this.screenshotStage.close();
 		this.isOpened = false;
+		this.mainStage.setAlwaysOnTop(true);
 	}
 }
