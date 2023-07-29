@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -46,7 +47,8 @@ public class ScreenshotWindow {
 			loader.setController(this.controller);
 			Scene scene = new Scene(loader.load());
 			this.controller.setImage();
-			this.screenshotStage.setFullScreen(true);
+			this.screenshotStage.setWidth(Screen.getPrimary().getBounds().getWidth());
+			this.screenshotStage.setHeight(Screen.getPrimary().getBounds().getHeight());
 			this.screenshotStage.setResizable(false);
 			this.screenshotStage.setScene(scene);
 			this.screenshotStage.setTitle("Custom Shortcuts");
