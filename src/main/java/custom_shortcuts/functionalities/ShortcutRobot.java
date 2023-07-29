@@ -16,7 +16,6 @@ public class ShortcutRobot {
 		double oldPositionY = this.robot.getMouseY();
 		click(mousePosition);
 		paste(text);
-		enter();
 		returnMouse(oldPositionX, oldPositionY);
 	}
 
@@ -33,11 +32,6 @@ public class ShortcutRobot {
 		this.robot.keyPress(KeyCode.V);
 		this.robot.keyRelease(KeyCode.V);
 		this.robot.keyRelease(KeyCode.CONTROL);
-	}
-
-	private void enter() {
-		this.robot.keyPress(KeyCode.ENTER);
-		this.robot.keyRelease(KeyCode.ENTER);
 	}
 
 	private void returnMouse(double positionX, double positionY) {
