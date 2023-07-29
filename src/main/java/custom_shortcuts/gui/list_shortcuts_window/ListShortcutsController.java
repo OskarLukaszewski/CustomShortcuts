@@ -5,8 +5,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-
 import java.util.ArrayList;
 
 public class ListShortcutsController {
@@ -32,7 +32,7 @@ public class ListShortcutsController {
 			OneShortcutController oneShortcutController = new OneShortcutController(
 					this.sqlController, this, shortcuts.get(i), i);
 			loaderRow.setController(oneShortcutController);
-			GridPane newRow = loaderRow.load();
+			BorderPane newRow = loaderRow.load();
 			GridPane.setConstraints(newRow, 0, i);
 			this.gridPane.getChildren().add(newRow);
 		}
@@ -45,5 +45,9 @@ public class ListShortcutsController {
 
 	public void setFocus() {
 		this.titledPane.requestFocus();
+	}
+
+	public GridPane getGridPane() {
+		return this.gridPane;
 	}
 }

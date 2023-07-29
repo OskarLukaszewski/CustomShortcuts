@@ -36,7 +36,7 @@ public class ListShortcutsWindow {
 			this.listShortcutsStage.setScene(scene);
 			this.listShortcutsStage.setTitle("Custom Shortcuts");
 			this.listShortcutsStage.getIcons().add(getIcon());
-			this.listShortcutsStage.setResizable(false);
+			this.listShortcutsStage.setMinWidth(632);
 			this.listShortcutsStage.setOnCloseRequest(windowEvent -> this.isOpened = false);
 			this.listShortcutsController.displayShortcuts();
 			this.listShortcutsStage.show();

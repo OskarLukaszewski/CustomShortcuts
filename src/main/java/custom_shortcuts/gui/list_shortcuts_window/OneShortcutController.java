@@ -6,6 +6,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import java.util.Optional;
@@ -17,7 +18,11 @@ public class OneShortcutController {
 	private String[] shortcut;
 	private final int id;
 	private final SqlController sqlController;
+	private final GridPane parentGridPane;
 	private final ListShortcutsController listShortcutsController;
+
+	@FXML
+	private BorderPane mainBorderPane;
 
 	@FXML
 	private TextField nameTextField, parametersTextField;
@@ -32,9 +37,6 @@ public class OneShortcutController {
 	private FontAwesomeIconView topIcon, bottomIcon;
 
 	@FXML
-	private GridPane mainGridPane;
-
-	@FXML
 	private void initialize() {
 		this.nameTextField.setText(this.shortcut[0]);
 		this.parametersTextField.setText(this.shortcut[1]);
@@ -42,12 +44,15 @@ public class OneShortcutController {
 		setOnFocus(this.nameTextField);
 		setOnFocus(this.parametersTextField);
 		setOnFocus(this.bodyTextArea);
+		this.parentGridPane.widthProperty().addListener(
+				(observableValue, number, t1) -> changeWidthOfBorderPane(t1.doubleValue()));
 	}
 
 	public OneShortcutController(
 			SqlController sqlController, ListShortcutsController listShortcutsController, String[] shortcut, int id) {
 		this.sqlController = sqlController;
 		this.listShortcutsController = listShortcutsController;
+		this.parentGridPane = this.listShortcutsController.getGridPane();
 		this.isEditOn = false;
 		this.shortcut = shortcut;
 		this.id = id;
@@ -159,5 +164,9 @@ public class OneShortcutController {
 				this.listShortcutsController.setFocus();
 			}
 		});
+	}
+
+	private void changeWidthOfBorderPane(double width) {
+		this.mainBorderPane.setPrefWidth(width);
 	}
 }
