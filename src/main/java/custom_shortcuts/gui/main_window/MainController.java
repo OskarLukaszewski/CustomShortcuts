@@ -135,6 +135,8 @@ public class MainController {
 	public void listButtonClick() {
 		if (!this.listShortcutsWindow.isOpen()) {
 			this.listShortcutsService.startService();
+		} else {
+			this.listShortcutsWindow.open();
 		}
 	}
 

@@ -25,7 +25,7 @@ public class ListShortcutsService extends Service<ArrayList<BorderPane>> {
 
 		setOnSucceeded(workerStateEvent -> {
 			this.mainStage.getScene().setCursor(Cursor.DEFAULT);
-			this.listShortcutsWindow.open(getValue());
+			this.listShortcutsWindow.InitializeAndOpen(getValue());
 		});
 
 		setOnFailed(workerStateEvent -> {

@@ -24,6 +24,7 @@ public class AddShortcutWindow {
 
 	public void open() {
 		if (this.isOpened) {
+			this.addShortcutStage.setIconified(false);
 			this.addShortcutStage.requestFocus();
 		}
 		if (!this.isInitialized) {

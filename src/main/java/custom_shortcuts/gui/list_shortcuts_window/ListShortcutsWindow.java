@@ -24,13 +24,19 @@ public class ListShortcutsWindow {
 		this.isOpened = false;
 	}
 
-	public void open(ArrayList<BorderPane> newRows) {
+	public void InitializeAndOpen(ArrayList<BorderPane> newRows) {
 		if (this.isOpened) {
+			this.listShortcutsStage.setIconified(false);
 			this.listShortcutsStage.requestFocus();
 		}
 		else {
 			initializeAndOpen(newRows);
 		}
+	}
+
+	public void open() {
+		this.listShortcutsStage.setIconified(false);
+		this.listShortcutsStage.requestFocus();
 	}
 
 	public ListShortcutsController getController() {
