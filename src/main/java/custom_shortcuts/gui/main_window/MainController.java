@@ -3,6 +3,7 @@ package custom_shortcuts.gui.main_window;
 import custom_shortcuts.animations.HideShowAnimation;
 import custom_shortcuts.database.SqlController;
 import custom_shortcuts.functionalities.ShortcutRobot;
+import custom_shortcuts.functionalities.services.ListShortcutsService;
 import custom_shortcuts.functionalities.services.MoveRectangleHoldClockService;
 import custom_shortcuts.gui.add_shortcut_window.AddShortcutWindow;
 import custom_shortcuts.gui.list_shortcuts_window.ListShortcutsWindow;
@@ -32,7 +33,7 @@ public class MainController {
 	private final HideShowAnimation hideShowAnimation;
 	private final AddShortcutWindow addShortcutWindow;
 	private final ScreenshotWindow screenshotWindow;
-	private final ListShortcutsWindow listShortcutsWindow;
+	private final ListShortcutsService listShortcutsService;
 	private final ShortcutRobot shortcutRobot;
 	private final MoveRectangleHoldClockService moveRectangleHoldClockService;
 	private double yOffset, xOffset;
@@ -106,7 +107,7 @@ public class MainController {
 		this.sqlController = new SqlController("jdbc:sqlite:" + dataFolder.getPath() + "\\shortcuts.db");
 		this.addShortcutWindow = new AddShortcutWindow(this.sqlController);
 		this.screenshotWindow = new ScreenshotWindow(this.sqlController, this.mainStage);
-		this.listShortcutsWindow = new ListShortcutsWindow(this.sqlController);
+		this.listShortcutsService = new ListShortcutsService(this.sqlController, new ListShortcutsWindow(this.sqlController));
 		this.shortcutRobot = new ShortcutRobot();
 		this.fullyDraggable = false;
 		this.movedAwayFromEdge = false;
@@ -129,7 +130,7 @@ public class MainController {
 	}
 
 	public void listButtonClick() {
-		this.listShortcutsWindow.open();
+		this.listShortcutsService.startService();
 	}
 
 	public void locationButtonClick() {

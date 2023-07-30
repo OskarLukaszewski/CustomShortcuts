@@ -4,7 +4,12 @@ import custom_shortcuts.database.SqlController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+
+import java.util.ArrayList;
+
 import static custom_shortcuts.gui.main_window.CustomShortcuts.getIcon;
 
 public class ListShortcutsWindow {
@@ -15,20 +20,24 @@ public class ListShortcutsWindow {
 
 	public ListShortcutsWindow(SqlController sqlController) {
 		this.listShortcutsStage = new Stage();
-		this.listShortcutsController = new ListShortcutsController(sqlController);
+		this.listShortcutsController = new ListShortcutsController();
 		this.isOpened = false;
 	}
 
-	public void open() {
+	public void open(ArrayList<BorderPane> newRows) {
 		if (this.isOpened) {
 			this.listShortcutsStage.requestFocus();
 		}
 		else {
-			initializeAndOpen();
+			initializeAndOpen(newRows);
 		}
 	}
 
-	private void initializeAndOpen() {
+	public ListShortcutsController getController() {
+		return this.listShortcutsController;
+	}
+
+	private void initializeAndOpen(ArrayList<BorderPane> newRows) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("ListOfShortcuts.fxml"));
 			loader.setController(this.listShortcutsController);
@@ -38,7 +47,7 @@ public class ListShortcutsWindow {
 			this.listShortcutsStage.getIcons().add(getIcon());
 			this.listShortcutsStage.setMinWidth(632);
 			this.listShortcutsStage.setOnCloseRequest(windowEvent -> this.isOpened = false);
-			this.listShortcutsController.displayShortcuts();
+			this.listShortcutsController.displayShortcuts(newRows);
 			this.listShortcutsStage.show();
 			this.listShortcutsController.setFocus();
 			this.isOpened = true;
