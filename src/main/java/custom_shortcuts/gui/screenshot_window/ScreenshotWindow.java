@@ -5,6 +5,7 @@ import static custom_shortcuts.gui.main_window.CustomShortcuts.getIcon;
 
 import custom_shortcuts.gui.main_window.MainController;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.input.KeyCode;
@@ -56,6 +57,7 @@ public class ScreenshotWindow {
 			this.screenshotStage.setScene(scene);
 			this.screenshotStage.setTitle("Custom Shortcuts");
 			this.screenshotStage.getIcons().add(getIcon());
+			this.screenshotStage.getScene().setCursor(Cursor.CROSSHAIR);
 			this.screenshotStage.setOnCloseRequest(windowEvent -> {
 				this.isOpened = false;
 				this.mainStage.setAlwaysOnTop(true);
