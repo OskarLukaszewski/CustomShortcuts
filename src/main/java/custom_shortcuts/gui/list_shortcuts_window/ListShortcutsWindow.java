@@ -34,7 +34,7 @@ public class ListShortcutsWindow {
 		}
 	}
 
-	public void open() {
+	public void focus() {
 		this.listShortcutsStage.setIconified(false);
 		this.listShortcutsStage.requestFocus();
 	}

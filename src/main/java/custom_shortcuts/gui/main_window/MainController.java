@@ -133,10 +133,10 @@ public class MainController {
 	}
 
 	public void listButtonClick() {
-		if (!this.listShortcutsWindow.isOpen()) {
-			this.listShortcutsService.startService();
+		if (this.listShortcutsWindow.isOpen()) {
+			this.listShortcutsWindow.focus();
 		} else {
-			this.listShortcutsWindow.open();
+			this.listShortcutsService.startService();
 		}
 	}
 
