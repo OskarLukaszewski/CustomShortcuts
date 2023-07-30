@@ -3,7 +3,8 @@ package custom_shortcuts.gui.main_window;
 import custom_shortcuts.animations.HideShowAnimation;
 import custom_shortcuts.database.DataFolder;
 import custom_shortcuts.database.SqlController;
-import custom_shortcuts.functionalities.ShortcutRobot;
+import custom_shortcuts.functionalities.robot.ShortcutRobot;
+import custom_shortcuts.functionalities.robot.ShortcutRobotInput;
 import custom_shortcuts.functionalities.services.ListShortcutsService;
 import custom_shortcuts.functionalities.services.MoveRectangleHoldClockService;
 import custom_shortcuts.gui.add_shortcut_window.AddShortcutWindow;
@@ -23,8 +24,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-
-import java.io.File;
 
 import static custom_shortcuts.gui.main_window.CustomShortcuts.getIcon;
 
@@ -152,16 +151,10 @@ public class MainController {
 	}
 
 	private void enterShortcut() {
-		String[] input = this.shortcutTextField.getText().split(" ");
+		String rawInput = this.shortcutTextField.getText();
 		try {
-			double[] mousePosition = this.sqlController.getMousePosition();
-			String[] shortcut = this.sqlController.getShortcut(input[0]);
-			String[] parameters = shortcut[1].split(" ");
-			String body = shortcut[2];
-			for (int i = 1; i < input.length; i++) {
-				body = body.replace(parameters[i-1], input[i]);
-			}
-			this.shortcutRobot.enterShortcut(mousePosition, body);
+			ShortcutRobotInput shortcutRobotInput = new ShortcutRobotInput(this.sqlController, rawInput);
+			this.shortcutRobot.enterShortcut(shortcutRobotInput);
 			this.shortcutTextField.setText("");
 		} catch (Exception e) {
 			Alert errorAlert = new Alert(Alert.AlertType.ERROR);

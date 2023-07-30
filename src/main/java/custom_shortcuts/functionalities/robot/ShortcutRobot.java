@@ -1,4 +1,4 @@
-package custom_shortcuts.functionalities;
+package custom_shortcuts.functionalities.robot;
 
 import javafx.scene.input.*;
 import javafx.scene.robot.Robot;
@@ -11,11 +11,11 @@ public class ShortcutRobot {
 		this.robot = new Robot();
 	}
 
-	public void enterShortcut(double[] mousePosition, String text) {
+	public void enterShortcut(ShortcutRobotInput shortcutRobotInput) {
 		double oldPositionX = this.robot.getMouseX();
 		double oldPositionY = this.robot.getMouseY();
-		click(mousePosition);
-		paste(text);
+		click(shortcutRobotInput.getMousePosition());
+		paste(shortcutRobotInput.getBody());
 		returnMouse(oldPositionX, oldPositionY);
 	}
 
