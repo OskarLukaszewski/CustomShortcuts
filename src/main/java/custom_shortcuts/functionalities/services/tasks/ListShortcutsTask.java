@@ -6,21 +6,27 @@ import custom_shortcuts.gui.list_shortcuts_window.ListShortcutsWindow;
 import custom_shortcuts.gui.list_shortcuts_window.OneShortcutController;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
+
 import java.util.ArrayList;
 
 public class ListShortcutsTask extends Task<ArrayList<BorderPane>> {
 
 	private final SqlController sqlController;
 	private final ListShortcutsController listShortcutsController;
+	private final Stage mainStage;
 
-	public ListShortcutsTask(SqlController sqlController, ListShortcutsController listShortcutsController) {
+	public ListShortcutsTask(SqlController sqlController, ListShortcutsController listShortcutsController, Stage mainStage) {
 		this.sqlController = sqlController;
 		this.listShortcutsController = listShortcutsController;
+		this.mainStage = mainStage;
 	}
 	@Override
 	protected ArrayList<BorderPane> call() throws Exception {
+		this.mainStage.getScene().setCursor(Cursor.WAIT);
 		ArrayList<String[]> shortcuts = this.sqlController.getAllShortcuts();
 		ArrayList<BorderPane> newRows = new ArrayList<>();
 		for (int i=0; i<shortcuts.size(); i++) {

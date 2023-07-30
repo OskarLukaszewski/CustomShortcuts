@@ -37,6 +37,10 @@ public class ListShortcutsWindow {
 		return this.listShortcutsController;
 	}
 
+	public boolean isOpen() {
+		return this.isOpened;
+	}
+
 	private void initializeAndOpen(ArrayList<BorderPane> newRows) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("ListOfShortcuts.fxml"));

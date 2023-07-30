@@ -33,6 +33,7 @@ public class MainController {
 	private final HideShowAnimation hideShowAnimation;
 	private final AddShortcutWindow addShortcutWindow;
 	private final ScreenshotWindow screenshotWindow;
+	private final ListShortcutsWindow listShortcutsWindow;
 	private final ListShortcutsService listShortcutsService;
 	private final ShortcutRobot shortcutRobot;
 	private final MoveRectangleHoldClockService moveRectangleHoldClockService;
@@ -107,7 +108,9 @@ public class MainController {
 		this.sqlController = new SqlController("jdbc:sqlite:" + dataFolder.getPath() + "\\shortcuts.db");
 		this.addShortcutWindow = new AddShortcutWindow(this.sqlController);
 		this.screenshotWindow = new ScreenshotWindow(this.sqlController, this.mainStage);
-		this.listShortcutsService = new ListShortcutsService(this.sqlController, new ListShortcutsWindow(this.sqlController));
+		this.listShortcutsWindow = new ListShortcutsWindow(this.sqlController);
+		this.listShortcutsService = new ListShortcutsService(
+				this.sqlController, this.listShortcutsWindow, this.mainStage);
 		this.shortcutRobot = new ShortcutRobot();
 		this.fullyDraggable = false;
 		this.movedAwayFromEdge = false;
@@ -130,7 +133,9 @@ public class MainController {
 	}
 
 	public void listButtonClick() {
-		this.listShortcutsService.startService();
+		if (!this.listShortcutsWindow.isOpen()) {
+			this.listShortcutsService.startService();
+		}
 	}
 
 	public void locationButtonClick() {
