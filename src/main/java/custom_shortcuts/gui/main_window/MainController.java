@@ -141,7 +141,6 @@ public class MainController {
 	}
 
 	public void locationButtonClick() {
-		this.mainStage.setAlwaysOnTop(false);
 		this.screenshotWindow.open();
 	}
 

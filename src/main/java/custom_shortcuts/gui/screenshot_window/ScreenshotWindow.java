@@ -50,6 +50,7 @@ public class ScreenshotWindow {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("ScreenshotWindow.fxml"));
 			loader.setController(this.controller);
 			Scene scene = new Scene(loader.load());
+			this.mainStage.hide();
 			this.controller.setImage();
 			this.screenshotStage.setWidth(Screen.getPrimary().getBounds().getWidth());
 			this.screenshotStage.setHeight(Screen.getPrimary().getBounds().getHeight());
@@ -60,11 +61,12 @@ public class ScreenshotWindow {
 			this.screenshotStage.getScene().setCursor(Cursor.CROSSHAIR);
 			this.screenshotStage.setOnCloseRequest(windowEvent -> {
 				this.isOpened = false;
-				this.mainStage.setAlwaysOnTop(true);
+				this.mainStage.show();
 			});
 			this.screenshotStage.show();
 			this.isOpened = true;
 		} catch (IOException e) {
+			this.mainStage.show();
 			this.isOpened = false;
 			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 			errorAlert.setHeaderText("Window cannot be opened");
@@ -78,6 +80,6 @@ public class ScreenshotWindow {
 	public void close() {
 		this.screenshotStage.close();
 		this.isOpened = false;
-		this.mainStage.setAlwaysOnTop(true);
+		this.mainStage.show();
 	}
 }
