@@ -18,7 +18,7 @@ public class ListShortcutsWindow {
 	private final ListShortcutsController listShortcutsController;
 	private boolean isOpened;
 
-	public ListShortcutsWindow(SqlController sqlController) {
+	public ListShortcutsWindow() {
 		this.listShortcutsStage = new Stage();
 		this.listShortcutsController = new ListShortcutsController();
 		this.isOpened = false;

@@ -108,7 +108,7 @@ public class MainController {
 		this.sqlController = new SqlController("jdbc:sqlite:" + dataFolder.getPath() + "\\shortcuts.db");
 		this.addShortcutWindow = new AddShortcutWindow(this.sqlController);
 		this.screenshotWindow = new ScreenshotWindow(this.sqlController, this.mainStage);
-		this.listShortcutsWindow = new ListShortcutsWindow(this.sqlController);
+		this.listShortcutsWindow = new ListShortcutsWindow();
 		this.listShortcutsService = new ListShortcutsService(
 				this.sqlController, this.listShortcutsWindow, this.mainStage);
 		this.shortcutRobot = new ShortcutRobot();
