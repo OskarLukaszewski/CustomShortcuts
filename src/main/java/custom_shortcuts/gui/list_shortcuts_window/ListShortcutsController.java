@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class ListShortcutsController {
 
 	private GridPane gridPane;
+	private ArrayList<OneShortcutController> subControllers;
 
 	@FXML
 	private ScrollPane scrollPane;
@@ -39,5 +40,16 @@ public class ListShortcutsController {
 
 	public GridPane getGridPane() {
 		return this.gridPane;
+	}
+
+	public void setSubControllers(ArrayList<OneShortcutController> subControllers) {
+		this.subControllers = subControllers;
+	}
+
+	public void clearSubControllers() {
+		for (OneShortcutController controller: this.subControllers) {
+			controller = null;
+		}
+		System.gc();
 	}
 }

@@ -37,6 +37,8 @@ public class ListShortcutsService extends Service<ArrayList<BorderPane>> {
 			stage.getIcons().add(getIcon());
 			errorAlert.showAndWait();
 		});
+
+		setOnCancelled(workerStateEvent -> this.mainStage.getScene().setCursor(Cursor.DEFAULT));
 	}
 
 	public void startService() {

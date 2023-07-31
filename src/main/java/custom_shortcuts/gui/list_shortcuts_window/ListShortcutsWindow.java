@@ -1,11 +1,9 @@
 package custom_shortcuts.gui.list_shortcuts_window;
 
-import custom_shortcuts.database.SqlController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -15,7 +13,7 @@ import static custom_shortcuts.gui.main_window.CustomShortcuts.getIcon;
 public class ListShortcutsWindow {
 
 	private final Stage listShortcutsStage;
-	private final ListShortcutsController listShortcutsController;
+	private ListShortcutsController listShortcutsController;
 	private boolean isOpened;
 
 	public ListShortcutsWindow() {
@@ -56,7 +54,11 @@ public class ListShortcutsWindow {
 			this.listShortcutsStage.setTitle("Custom Shortcuts");
 			this.listShortcutsStage.getIcons().add(getIcon());
 			this.listShortcutsStage.setMinWidth(632);
-			this.listShortcutsStage.setOnCloseRequest(windowEvent -> this.isOpened = false);
+			this.listShortcutsStage.setOnCloseRequest(windowEvent -> {
+				this.isOpened = false;
+				this.listShortcutsController.clearSubControllers();
+				this.listShortcutsController = new ListShortcutsController();
+			});
 			this.listShortcutsController.displayShortcuts(newRows);
 			this.listShortcutsStage.show();
 			this.listShortcutsController.setFocus();
