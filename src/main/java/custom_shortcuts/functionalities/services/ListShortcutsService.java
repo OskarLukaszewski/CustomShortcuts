@@ -43,6 +43,7 @@ public class ListShortcutsService extends Service<ArrayList<BorderPane>> {
 		if (isRunning()) {
 			cancel();
 		}
+		this.mainStage.getScene().setCursor(Cursor.WAIT);
 		reset();
 		start();
 	}
@@ -50,6 +51,6 @@ public class ListShortcutsService extends Service<ArrayList<BorderPane>> {
 
 	@Override
 	protected Task<ArrayList<BorderPane>> createTask() {
-		return new ListShortcutsTask(this.sqlController, this.listShortcutsWindow.getController(), this.mainStage);
+		return new ListShortcutsTask(this.sqlController, this.listShortcutsWindow.getController());
 	}
 }

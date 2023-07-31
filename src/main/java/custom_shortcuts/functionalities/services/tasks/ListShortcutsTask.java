@@ -17,16 +17,13 @@ public class ListShortcutsTask extends Task<ArrayList<BorderPane>> {
 
 	private final SqlController sqlController;
 	private final ListShortcutsController listShortcutsController;
-	private final Stage mainStage;
 
-	public ListShortcutsTask(SqlController sqlController, ListShortcutsController listShortcutsController, Stage mainStage) {
+	public ListShortcutsTask(SqlController sqlController, ListShortcutsController listShortcutsController) {
 		this.sqlController = sqlController;
 		this.listShortcutsController = listShortcutsController;
-		this.mainStage = mainStage;
 	}
 	@Override
 	protected ArrayList<BorderPane> call() throws Exception {
-		this.mainStage.getScene().setCursor(Cursor.WAIT);
 		ArrayList<String[]> shortcuts = this.sqlController.getAllShortcuts();
 		ArrayList<BorderPane> newRows = new ArrayList<>();
 		for (int i=0; i<shortcuts.size(); i++) {
