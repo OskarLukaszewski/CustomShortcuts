@@ -3,9 +3,12 @@ package custom_shortcuts.gui.list_shortcuts_window;
 import custom_shortcuts.database.SqlController;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -14,8 +17,10 @@ import static custom_shortcuts.gui.main_window.CustomShortcuts.getIcon;
 
 public class OneShortcutController {
 
-	private boolean isEditOn;
+	private boolean isEditOn, isDragOn;
 	private String[] shortcut;
+	private double yOffSet;
+	private double initialHeight;
 	private final int id;
 	private final SqlController sqlController;
 	private final GridPane parentGridPane;
@@ -37,6 +42,9 @@ public class OneShortcutController {
 	private FontAwesomeIconView topIcon, bottomIcon;
 
 	@FXML
+	private Separator separator;
+
+	@FXML
 	private void initialize() {
 		this.nameTextField.setText(this.shortcut[0]);
 		this.parametersTextField.setText(this.shortcut[1]);
@@ -46,6 +54,7 @@ public class OneShortcutController {
 		setOnFocus(this.bodyTextArea);
 		this.parentGridPane.widthProperty().addListener(
 				(observableValue, number, t1) -> changeWidthOfBorderPane(t1.doubleValue()));
+		setSeparatorMouseFunction();
 	}
 
 	public OneShortcutController(
@@ -54,8 +63,11 @@ public class OneShortcutController {
 		this.listShortcutsController = listShortcutsController;
 		this.parentGridPane = this.listShortcutsController.getGridPane();
 		this.isEditOn = false;
+		this.isDragOn = false;
 		this.shortcut = shortcut;
 		this.id = id;
+		this.yOffSet = 0;
+		this.initialHeight = 0;
 	}
 
 	public void topButtonClick() {
@@ -168,5 +180,36 @@ public class OneShortcutController {
 
 	private void changeWidthOfBorderPane(double width) {
 		this.mainBorderPane.setPrefWidth(width);
+	}
+
+	private void setSeparatorMouseFunction() {
+		this.separator.setOnMousePressed(mouseEvent -> {
+			this.yOffSet = mouseEvent.getScreenY();
+			this.initialHeight = this.mainBorderPane.getHeight();
+			this.separator.getScene().setCursor(Cursor.CLOSED_HAND);
+			this.isDragOn = true;
+		});
+		this.separator.setOnMouseDragged(mouseEvent -> {
+			double newHeight = this.initialHeight+mouseEvent.getScreenY()-this.yOffSet;
+			if (newHeight > 100) {
+				this.mainBorderPane.setMinHeight(newHeight);
+			} else {
+				this.mainBorderPane.setMinHeight(100);
+			}
+		});
+		this.separator.setOnMouseReleased(mouseEvent -> {
+			this.separator.getScene().setCursor(Cursor.DEFAULT);
+			this.isDragOn = false;
+		});
+		this.separator.setOnMouseEntered(mouseEvent -> {
+			if (!this.isDragOn) {
+				this.separator.getScene().setCursor(Cursor.OPEN_HAND);
+			}
+		});
+		this.separator.setOnMouseExited(mouseEvent -> {
+			if (!this.isDragOn) {
+				this.separator.getScene().setCursor(Cursor.DEFAULT);
+			}
+		});
 	}
 }
