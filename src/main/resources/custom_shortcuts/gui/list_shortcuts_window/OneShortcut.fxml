@@ -7,38 +7,9 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
 
 <BorderPane fx:id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="100.0" minWidth="600.0" prefHeight="100.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
-   <left>
-      <GridPane BorderPane.alignment="CENTER">
-         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="230.0" minWidth="230.0" prefWidth="100.0" />
-         </columnConstraints>
-         <rowConstraints>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-         </rowConstraints>
-         <children>
-            <FlowPane prefHeight="200.0" prefWidth="200.0">
-               <children>
-                  <TextField fx:id="nameTextField" editable="false" prefHeight="30.0" prefWidth="210.0" promptText="Name">
-                     <FlowPane.margin>
-                        <Insets left="10.0" top="10.0" />
-                     </FlowPane.margin>
-                  </TextField>
-                  <TextField fx:id="parametersTextField" editable="false" prefHeight="30.0" prefWidth="210.0" promptText="Parameters">
-                     <FlowPane.margin>
-                        <Insets left="10.0" top="17.0" />
-                     </FlowPane.margin>
-                  </TextField>
-               </children>
-            </FlowPane>
-         </children>
-      </GridPane>
-   </left>
    <right>
       <FlowPane maxWidth="25.0" minWidth="25.0" BorderPane.alignment="CENTER">
          <children>
@@ -74,4 +45,20 @@
    <bottom>
       <Separator fx:id="separator" prefWidth="200.0" scaleY="2.0" BorderPane.alignment="CENTER" />
    </bottom>
+   <left>
+      <FlowPane maxWidth="230.0" minWidth="230.0" BorderPane.alignment="CENTER">
+         <children>
+            <TextField fx:id="nameTextField" editable="false" prefHeight="30.0" prefWidth="210.0" promptText="Name">
+               <FlowPane.margin>
+                  <Insets left="10.0" top="10.0" />
+               </FlowPane.margin>
+            </TextField>
+            <TextField fx:id="parametersTextField" editable="false" prefHeight="30.0" prefWidth="210.0" promptText="Parameters">
+               <FlowPane.margin>
+                  <Insets left="10.0" top="17.0" />
+               </FlowPane.margin>
+            </TextField>
+         </children>
+      </FlowPane>
+   </left>
 </BorderPane>
