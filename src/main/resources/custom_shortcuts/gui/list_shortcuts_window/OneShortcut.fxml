@@ -43,7 +43,7 @@
       </TextArea>
    </center>
    <bottom>
-      <Separator fx:id="separator" prefWidth="200.0" scaleY="2.0" BorderPane.alignment="CENTER" />
+      <Separator fx:id="separator" prefWidth="200.0" BorderPane.alignment="CENTER" />
    </bottom>
    <left>
       <FlowPane maxWidth="230.0" minWidth="230.0" BorderPane.alignment="CENTER">

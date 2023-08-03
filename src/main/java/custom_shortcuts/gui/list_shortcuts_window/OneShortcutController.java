@@ -191,11 +191,7 @@ public class OneShortcutController {
 		});
 		this.separator.setOnMouseDragged(mouseEvent -> {
 			double newHeight = this.initialHeight + mouseEvent.getScreenY() - this.yOffSet;
-			if (newHeight > 100) {
-				this.mainBorderPane.setMinHeight(newHeight);
-			} else {
-				this.mainBorderPane.setMinHeight(100);
-			}
+			this.mainBorderPane.setMinHeight(Math.max(newHeight, 100));
 		});
 		this.separator.setOnMouseReleased(mouseEvent -> {
 			this.separator.getScene().setCursor(Cursor.DEFAULT);
