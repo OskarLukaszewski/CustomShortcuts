@@ -23,13 +23,24 @@ public class ShortcutRobotInput {
 	}
 
 	private String createBody(String rawInput) throws Exception {
-		String[] input = rawInput.split(" ");
-		String[] shortcut = this.sqlController.getShortcut(input[0]);
-		String[] parameters = shortcut[1].split(" ");
-		String body = shortcut[2];
-		for (int i = 1; i < input.length; i++) {
-			body = body.replace(parameters[i-1], input[i]);
+		int indexOfFirstSpace = rawInput.indexOf(' ');
+		String rawInputParameters;
+		if (indexOfFirstSpace + 1 < rawInput.length()) {
+			rawInputParameters = rawInput.substring(indexOfFirstSpace + 1);
+		} else {
+			rawInputParameters = "";
 		}
+		String[] inputParameters = rawInputParameters.split(";");
+
+		String shortcutName = rawInput.split(" ")[0];
+		String[] shortcut = this.sqlController.getShortcut(shortcutName);
+		String[] parameters = shortcut[1].split(";");
+
+		String body = shortcut[2];
+		for (int i = 0; i < Math.min(inputParameters.length, parameters.length); i++) {
+			body = body.replace(parameters[i], inputParameters[i]);
+		}
+
 		return body;
 	}
 
