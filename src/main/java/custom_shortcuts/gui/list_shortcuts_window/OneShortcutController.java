@@ -87,6 +87,7 @@ public class OneShortcutController {
 						this.bodyTextArea.getText()};
 				try {
 					this.sqlController.updateShortcut(this.shortcut[0], newShortcut);
+					this.shortcut = newShortcut;
 				} catch (Exception e) {
 					Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 					errorAlert.setHeaderText("Operation failed");
@@ -95,7 +96,6 @@ public class OneShortcutController {
 					stage2.getIcons().add(getIcon());
 					errorAlert.showAndWait();
 				}
-				this.shortcut = newShortcut;
 				setEditable(false);
 			}
 		} else {
