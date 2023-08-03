@@ -9,10 +9,11 @@ import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import java.util.ArrayList;
+import java.util.List;
+
 import static custom_shortcuts.gui.main_window.CustomShortcuts.getIcon;
 
-public class ListShortcutsService extends Service<ArrayList<BorderPane>> {
+public class ListShortcutsService extends Service<List<BorderPane>> {
 
 	private final SqlController sqlController;
 	private final ListShortcutsWindow listShortcutsWindow;
@@ -52,7 +53,7 @@ public class ListShortcutsService extends Service<ArrayList<BorderPane>> {
 
 
 	@Override
-	protected Task<ArrayList<BorderPane>> createTask() {
+	protected Task<List<BorderPane>> createTask() {
 		return new ListShortcutsTask(this.sqlController, this.listShortcutsWindow.getController());
 	}
 }

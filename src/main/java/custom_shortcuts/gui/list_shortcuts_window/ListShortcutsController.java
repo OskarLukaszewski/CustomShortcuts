@@ -5,14 +5,13 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-
-import java.util.ArrayList;
+import java.util.List;
 
 public class ListShortcutsController {
 
 	private GridPane gridPane;
-	private ArrayList<OneShortcutController> subControllers;
-	private ArrayList<BorderPane> newRows;
+	private List<OneShortcutController> subControllers;
+	private List<BorderPane> newRows;
 
 	@FXML
 	private ScrollPane scrollPane;
@@ -24,7 +23,7 @@ public class ListShortcutsController {
 		this.gridPane = new GridPane();
 	}
 
-	public void displayShortcuts(ArrayList<BorderPane> newRows) {
+	public void displayShortcuts(List<BorderPane> newRows) {
 		this.newRows = newRows;
 		for (BorderPane newRow: this.newRows) {
 			this.gridPane.getChildren().add(newRow);
@@ -44,7 +43,7 @@ public class ListShortcutsController {
 		return this.gridPane;
 	}
 
-	public void setSubControllers(ArrayList<OneShortcutController> subControllers) {
+	public void setSubControllers(List<OneShortcutController> subControllers) {
 		this.subControllers = subControllers;
 	}
 

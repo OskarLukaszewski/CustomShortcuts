@@ -9,8 +9,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
-public class ListShortcutsTask extends Task<ArrayList<BorderPane>> {
+public class ListShortcutsTask extends Task<List<BorderPane>> {
 
 	private final SqlController sqlController;
 	private final ListShortcutsController listShortcutsController;
@@ -20,10 +23,12 @@ public class ListShortcutsTask extends Task<ArrayList<BorderPane>> {
 		this.listShortcutsController = listShortcutsController;
 	}
 	@Override
-	protected ArrayList<BorderPane> call() throws Exception {
-		ArrayList<String[]> shortcuts = this.sqlController.getAllShortcuts();
-		ArrayList<BorderPane> newRows = new ArrayList<>();
-		ArrayList<OneShortcutController> controllers = new ArrayList<>();
+	protected List<BorderPane> call() throws Exception {
+		List<String[]> shortcuts = this.sqlController.getAllShortcuts().stream()
+				.sorted(Comparator.comparing(arr -> arr[0]))
+				.collect(Collectors.toList());
+		List<BorderPane> newRows = new ArrayList<>();
+		List<OneShortcutController> controllers = new ArrayList<>();
 		for (int i=0; i<shortcuts.size(); i++) {
 			FXMLLoader loaderRow = new FXMLLoader(ListShortcutsWindow.class.getResource("OneShortcut.fxml"));
 			OneShortcutController oneShortcutController = new OneShortcutController(

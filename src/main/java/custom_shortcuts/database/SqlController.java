@@ -2,6 +2,7 @@ package custom_shortcuts.database;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class SqlController {
 
@@ -118,8 +119,8 @@ public class SqlController {
 		return result;
 	}
 
-	public ArrayList<String[]> getAllShortcuts() throws Exception {
-		ArrayList<String[]> result = new ArrayList<>();
+	public List<String[]> getAllShortcuts() throws Exception {
+		List<String[]> result = new ArrayList<>();
 		String sql = "SELECT * FROM shortcuts;";
 		Statement stmt;
 		try {

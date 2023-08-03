@@ -5,9 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-
-import java.util.ArrayList;
-
+import java.util.List;
 import static custom_shortcuts.gui.main_window.CustomShortcuts.getIcon;
 
 public class ListShortcutsWindow {
@@ -22,7 +20,7 @@ public class ListShortcutsWindow {
 		this.isOpened = false;
 	}
 
-	public void InitializeAndOpen(ArrayList<BorderPane> newRows) {
+	public void InitializeAndOpen(List<BorderPane> newRows) {
 		if (this.isOpened) {
 			this.listShortcutsStage.setIconified(false);
 			this.listShortcutsStage.requestFocus();
@@ -45,7 +43,7 @@ public class ListShortcutsWindow {
 		return this.isOpened;
 	}
 
-	private void initializeAndOpen(ArrayList<BorderPane> newRows) {
+	private void initializeAndOpen(List<BorderPane> newRows) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("ListOfShortcuts.fxml"));
 			loader.setController(this.listShortcutsController);
