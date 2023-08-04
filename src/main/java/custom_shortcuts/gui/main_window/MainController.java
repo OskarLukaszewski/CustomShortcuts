@@ -3,6 +3,7 @@ package custom_shortcuts.gui.main_window;
 import custom_shortcuts.animations.HideShowAnimation;
 import custom_shortcuts.database.DataFolder;
 import custom_shortcuts.database.SqlController;
+import custom_shortcuts.functionalities.autompletion.ShortcutAutocomplete;
 import custom_shortcuts.functionalities.robot.ShortcutRobot;
 import custom_shortcuts.functionalities.robot.ShortcutRobotInput;
 import custom_shortcuts.functionalities.services.ListShortcutsService;
@@ -24,7 +25,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-
 import static custom_shortcuts.gui.main_window.CustomShortcuts.getIcon;
 
 public class MainController {
@@ -37,6 +37,7 @@ public class MainController {
 	private final ListShortcutsService listShortcutsService;
 	private final ShortcutRobot shortcutRobot;
 	private final MoveRectangleHoldClockService moveRectangleHoldClockService;
+	private final ShortcutAutocomplete shortcutAutocomplete;
 	private double yOffset, xOffset;
 	private final SqlController sqlController;
 	private boolean fullyDraggable, movedAwayFromEdge;
@@ -61,6 +62,7 @@ public class MainController {
 
 	@FXML
 	private void initialize() {
+		this.shortcutAutocomplete.setTextField(this.shortcutTextField);
 		this.moveRectangle.setOnMousePressed(mouseEvent -> {
 			this.moveRectangle.setFill(Color.WHITE);
 			this.yOffset = mouseEvent.getSceneY();
@@ -111,6 +113,7 @@ public class MainController {
 		this.listShortcutsWindow = new ListShortcutsWindow();
 		this.listShortcutsService = new ListShortcutsService(
 				this.sqlController, this.listShortcutsWindow, this.mainStage);
+		this.shortcutAutocomplete = new ShortcutAutocomplete(this.sqlController);
 		this.shortcutRobot = new ShortcutRobot();
 		this.fullyDraggable = false;
 		this.movedAwayFromEdge = false;
@@ -170,5 +173,9 @@ public class MainController {
 			stage.getIcons().add(getIcon());
 			errorAlert.showAndWait();
 		}
+	}
+
+	private void showSuggestions() {
+		this.shortcutAutocomplete.showSuggestions();
 	}
 }

@@ -138,6 +138,24 @@ public class SqlController {
 		return result;
 	}
 
+	public List<String> getSuggestedShortcuts(String prompt) {
+		List<String> result = new ArrayList<>();
+		String sql = "SELECT * FROM shortcuts WHERE name LIKE ?;";
+		PreparedStatement stmt;
+		try {
+			stmt = this.conn.prepareStatement(sql);
+			stmt.setString(1, "%"+prompt+"%");
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()) {
+				result.add(rs.getString("name"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return new ArrayList<>();
+		}
+		return result;
+	}
+
 	public void deleteShortcut(String name) throws Exception {
 		String sql = "DELETE FROM shortcuts WHERE name = ?;";
 		PreparedStatement stmt;

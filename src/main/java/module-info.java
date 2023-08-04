@@ -3,6 +3,7 @@ module custom_shortcuts {
 	requires javafx.controls;
 	requires javafx.fxml;
 	requires javafx.graphics;
+	requires org.controlsfx.controls;
 	requires de.jensd.fx.glyphs.fontawesome;
 	requires java.sql;
 
