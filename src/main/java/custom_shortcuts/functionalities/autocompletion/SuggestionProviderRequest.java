@@ -16,6 +16,6 @@ public class SuggestionProviderRequest implements AutoCompletionBinding.ISuggest
 
 	@Override
 	public String getUserText() {
-		return prompt;
+		return this.prompt;
 	}
 }
