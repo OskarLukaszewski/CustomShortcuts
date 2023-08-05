@@ -122,6 +122,10 @@ public class MainController {
 		this.xOffset = 0;
 	}
 
+	public void resetAutocomplete() {
+		this.shortcutAutocomplete.reset();
+	}
+
 	public void hideButtonClick() {
 		this.hideShowAnimation.play();
 	}

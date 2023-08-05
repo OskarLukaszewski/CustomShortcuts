@@ -12,6 +12,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import java.util.Optional;
 import static custom_shortcuts.gui.main_window.CustomShortcuts.getIcon;
+import static custom_shortcuts.gui.main_window.CustomShortcuts.getMainController;
 
 public class OneShortcutController {
 
@@ -87,6 +88,7 @@ public class OneShortcutController {
 						this.bodyTextArea.getText()};
 				try {
 					this.sqlController.updateShortcut(this.shortcut[0], newShortcut);
+					getMainController().resetAutocomplete();
 					this.shortcut = newShortcut;
 				} catch (Exception e) {
 					Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -131,6 +133,7 @@ public class OneShortcutController {
 			if (option.isPresent() && ButtonType.OK.equals(option.get())) {
 				try {
 					this.sqlController.deleteShortcut(this.shortcut[0]);
+					getMainController().resetAutocomplete();
 					this.listShortcutsController.removeRowAtIndex(this.id);
 				} catch (Exception e) {
 					Alert errorAlert = new Alert(Alert.AlertType.ERROR);

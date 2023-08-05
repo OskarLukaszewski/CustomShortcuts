@@ -14,11 +14,13 @@ import java.io.InputStream;
 public class CustomShortcuts extends Application {
 
 	private static Image icon = null;
+	private static MainController mainController;
 
 	@Override
 	public void start(Stage stage) throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(CustomShortcuts.class.getResource("CustomShortcuts.fxml"));
-		fxmlLoader.setController(new MainController(stage));
+		mainController = new MainController(stage);
+		fxmlLoader.setController(mainController);
 		Scene scene = new Scene(fxmlLoader.load());
 		stage.setX(Screen.getPrimary().getBounds().getWidth()-230);
 		stage.setY(Screen.getPrimary().getBounds().getHeight()/3);
@@ -42,6 +44,10 @@ public class CustomShortcuts extends Application {
 
 	public static Image getIcon() {
 		return icon;
+	}
+
+	public static MainController getMainController() {
+		return mainController;
 	}
 
 }

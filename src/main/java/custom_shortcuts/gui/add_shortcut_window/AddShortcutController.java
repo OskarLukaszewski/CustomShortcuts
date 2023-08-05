@@ -7,8 +7,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
 import static custom_shortcuts.gui.main_window.CustomShortcuts.getIcon;
+import static custom_shortcuts.gui.main_window.CustomShortcuts.getMainController;
 
 public class AddShortcutController {
 
@@ -44,6 +44,7 @@ public class AddShortcutController {
 						this.nameTextField.getText(),
 						this.parametersTextField.getText(),
 						this.bodyTextArea.getText()});
+				getMainController().resetAutocomplete();
 			} catch (Exception e) {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
 				alert.setHeaderText("Incorrect input");
@@ -54,14 +55,14 @@ public class AddShortcutController {
 				return;
 			}
 		}
-		hideAndRestet();
+		hideAndReset();
 	}
 
 	public void closeButtonClick() {
-		hideAndRestet();
+		hideAndReset();
 	}
 
-	private void hideAndRestet() {
+	private void hideAndReset() {
 		this.nameTextField.setText("");
 		this.parametersTextField.setText("");
 		this.bodyTextArea.setText("");
