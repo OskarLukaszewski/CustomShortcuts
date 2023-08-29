@@ -96,7 +96,6 @@ public class MainController {
 			}
 		});
 		this.shortcutTextField.setOnKeyPressed(keyEvent -> {
-			this.shortcutAutocomplete.updateSuggestions();
 			if (keyEvent.getCode().equals(KeyCode.ENTER)) {
 				enterShortcut();
 			}
