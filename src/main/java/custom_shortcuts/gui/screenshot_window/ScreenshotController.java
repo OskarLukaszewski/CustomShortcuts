@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.robot.Robot;
 import javafx.stage.Screen;
@@ -23,8 +24,12 @@ public class ScreenshotController {
 	@FXML
 	private void initialize() {
 		this.imageView.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-			boolean succeeded = setMousePosition(new double[] {mouseEvent.getScreenX(), mouseEvent.getScreenY()});
-			if (succeeded) {
+			if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+				boolean succeeded = setMousePosition(new double[] {mouseEvent.getScreenX(), mouseEvent.getScreenY()});
+				if (succeeded) {
+					close();
+				}
+			} else if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
 				close();
 			}
 		});
