@@ -1,9 +1,6 @@
 package custom_shortcuts.gui.screenshot_window;
 
 import custom_shortcuts.database.SqlController;
-import static custom_shortcuts.gui.main_window.CustomShortcuts.getIcon;
-
-import custom_shortcuts.gui.main_window.MainController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
@@ -13,8 +10,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
 import java.io.IOException;
+import static custom_shortcuts.gui.main_window.CustomShortcuts.getIcon;
 
 public class ScreenshotWindow {
 
