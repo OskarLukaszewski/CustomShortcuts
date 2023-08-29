@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import java.util.Optional;
 import static custom_shortcuts.gui.main_window.CustomShortcuts.getIcon;
@@ -41,7 +42,7 @@ public class OneShortcutController {
 	private FontAwesomeIconView topIcon, bottomIcon;
 
 	@FXML
-	private Separator separator;
+	private Pane separator;
 
 	@FXML
 	private void initialize() {
@@ -195,7 +196,13 @@ public class OneShortcutController {
 			this.mainBorderPane.setMinHeight(Math.max(newHeight, 100));
 		});
 		this.separator.setOnMouseReleased(mouseEvent -> {
-			this.separator.getScene().setCursor(Cursor.DEFAULT);
+			double mousePosition = mouseEvent.getSceneY();
+			double separatorPosition = this.separator.localToScene(this.separator.getBoundsInLocal()).getCenterY()+5;
+			if (Math.abs(mousePosition - separatorPosition) <= 10) {
+				this.separator.getScene().setCursor(Cursor.OPEN_HAND);
+			} else {
+				this.separator.getScene().setCursor(Cursor.DEFAULT);
+			}
 			this.isDragOn = false;
 		});
 		this.separator.setOnMouseEntered(mouseEvent -> {
