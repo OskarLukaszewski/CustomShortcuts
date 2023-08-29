@@ -140,7 +140,7 @@ public class SqlController {
 
 	public List<String> getSuggestedShortcuts(String prompt) {
 		List<String> result = new ArrayList<>();
-		String sql = "SELECT * FROM shortcuts WHERE name LIKE ?;";
+		String sql = "SELECT name FROM shortcuts WHERE name LIKE ?;";
 		PreparedStatement stmt;
 		try {
 			stmt = this.conn.prepareStatement(sql);
