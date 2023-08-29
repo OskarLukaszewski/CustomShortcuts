@@ -53,6 +53,7 @@ public class ListShortcutsWindow {
 			this.listShortcutsStage.getIcons().add(getIcon());
 			this.listShortcutsStage.setMinWidth(632);
 			this.listShortcutsStage.setOnCloseRequest(windowEvent -> {
+				this.listShortcutsStage.hide();
 				this.isOpened = false;
 				this.listShortcutsController.clearRows();
 				this.listShortcutsController.clearSubControllers();
