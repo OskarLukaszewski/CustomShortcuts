@@ -58,7 +58,9 @@ public class ListShortcutsWindow {
 				this.listShortcutsController.clearRows();
 				this.listShortcutsController.clearSubControllers();
 				this.listShortcutsController = new ListShortcutsController();
+				System.gc();
 			});
+			this.listShortcutsController.loadSearchTab();
 			this.listShortcutsController.displayShortcuts(newRows);
 			this.listShortcutsStage.show();
 			this.listShortcutsController.setFocus();

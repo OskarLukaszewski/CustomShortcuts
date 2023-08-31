@@ -3,7 +3,7 @@ package custom_shortcuts.gui.main_window;
 import custom_shortcuts.animations.HideShowAnimation;
 import custom_shortcuts.database.DataFolder;
 import custom_shortcuts.database.SqlController;
-import custom_shortcuts.functionalities.autocompletion.ShortcutAutocomplete;
+import custom_shortcuts.functionalities.autocompletion.ShortcutAutoComplete;
 import custom_shortcuts.functionalities.robot.ShortcutRobot;
 import custom_shortcuts.functionalities.robot.ShortcutRobotInput;
 import custom_shortcuts.functionalities.services.ListShortcutsService;
@@ -37,7 +37,7 @@ public class MainController {
 	private final ListShortcutsService listShortcutsService;
 	private final ShortcutRobot shortcutRobot;
 	private final MoveRectangleHoldClockService moveRectangleHoldClockService;
-	private ShortcutAutocomplete shortcutAutocomplete;
+	private ShortcutAutoComplete shortcutAutocomplete;
 	private double yOffset, xOffset;
 	private final SqlController sqlController;
 	private boolean fullyDraggable, movedAwayFromEdge;
@@ -62,7 +62,8 @@ public class MainController {
 
 	@FXML
 	private void initialize() {
-		this.shortcutAutocomplete = new ShortcutAutocomplete(this.sqlController, this.shortcutTextField);
+		this.shortcutAutocomplete = new ShortcutAutoComplete(this.sqlController, this.shortcutTextField);
+		this.shortcutAutocomplete.setMaxWidth(180);
 		this.moveRectangle.setOnMousePressed(mouseEvent -> {
 			this.moveRectangle.setFill(Color.WHITE);
 			this.yOffset = mouseEvent.getSceneY();
@@ -121,8 +122,8 @@ public class MainController {
 		this.xOffset = 0;
 	}
 
-	public void resetAutocomplete() {
-		this.shortcutAutocomplete.reset();
+	public SqlController getSqlController() {
+		return this.sqlController;
 	}
 
 	public void hideButtonClick() {

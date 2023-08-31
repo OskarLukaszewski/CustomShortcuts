@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="600.0" prefHeight="26.0" style="-fx-border-width: 0 0 1 0; -fx-border-color: gray;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <TextField fx:id="textField" onAction="#textFieldEnter" prefHeight="25.0" promptText="Name" style="-fx-background-radius: 0;" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets bottom="1.0" />
+         </BorderPane.margin></TextField>
+   </center>
+   <right>
+      <StackPane prefHeight="25.0" prefWidth="25.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="button" maxHeight="17.0" maxWidth="17.0" minHeight="17.0" minWidth="17.0" mnemonicParsing="false" onAction="#buttonPress" style="-fx-background-radius: 0;">
+               <graphic>
+                  <FontAwesomeIconView glyphName="CLOSE" scaleX="0.9" scaleY="0.9" />
+               </graphic>
+            </Button>
+         </children>
+      </StackPane>
+   </right>
+</BorderPane>

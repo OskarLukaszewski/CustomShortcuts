@@ -1,6 +1,7 @@
 package custom_shortcuts.gui.add_shortcut_window;
 
 import custom_shortcuts.database.SqlController;
+import custom_shortcuts.functionalities.autocompletion.CollectionOfAutoCompletions;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -44,7 +45,7 @@ public class AddShortcutController {
 						this.nameTextField.getText(),
 						this.parametersTextField.getText(),
 						this.bodyTextArea.getText()});
-				getMainController().resetAutocomplete();
+				CollectionOfAutoCompletions.resetAutoCompletions();
 			} catch (Exception e) {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
 				alert.setHeaderText("Incorrect input");

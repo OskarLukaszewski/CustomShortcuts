@@ -1,6 +1,7 @@
 package custom_shortcuts.gui.list_shortcuts_window;
 
 import custom_shortcuts.database.SqlController;
+import custom_shortcuts.functionalities.autocompletion.CollectionOfAutoCompletions;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.fxml.FXML;
@@ -13,11 +14,10 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import java.util.Optional;
 import static custom_shortcuts.gui.main_window.CustomShortcuts.getIcon;
-import static custom_shortcuts.gui.main_window.CustomShortcuts.getMainController;
 
 public class OneShortcutController {
 
-	private boolean isEditOn, isDragOn;
+	private boolean isEditOn, isDragOn, movedToTop;
 	private String[] shortcut;
 	private double yOffSet;
 	private double initialHeight;
@@ -53,7 +53,7 @@ public class OneShortcutController {
 		setOnFocus(this.parametersTextField);
 		setOnFocus(this.bodyTextArea);
 		this.parentGridPane.widthProperty().addListener(
-				(observableValue, number, t1) -> changeWidthOfBorderPane(t1.doubleValue()));
+				(observableValue, number, t1) -> this.mainBorderPane.setPrefWidth(t1.doubleValue()));
 		setSeparatorMouseFunction();
 	}
 
@@ -68,6 +68,28 @@ public class OneShortcutController {
 		this.id = id;
 		this.yOffSet = 0;
 		this.initialHeight = 0;
+	}
+
+	public int getId() {
+		return this.id;
+	}
+
+	public String getShortcutName() {
+		return this.shortcut[0];
+	}
+
+	public boolean isMovedToTop() {
+		return this.movedToTop;
+	}
+
+	public void moveRowToOriginalPosition() {
+		GridPane.setConstraints(this.mainBorderPane, 0, this.id);
+		this.movedToTop = false;
+	}
+
+	public void moveRowToTop() {
+		GridPane.setConstraints(this.mainBorderPane, 0, 1);
+		this.movedToTop = true;
 	}
 
 	public void topButtonClick() {
@@ -89,7 +111,7 @@ public class OneShortcutController {
 						this.bodyTextArea.getText()};
 				try {
 					this.sqlController.updateShortcut(this.shortcut[0], newShortcut);
-					getMainController().resetAutocomplete();
+					CollectionOfAutoCompletions.resetAutoCompletions();
 					this.shortcut = newShortcut;
 				} catch (Exception e) {
 					Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -134,7 +156,7 @@ public class OneShortcutController {
 			if (option.isPresent() && ButtonType.OK.equals(option.get())) {
 				try {
 					this.sqlController.deleteShortcut(this.shortcut[0]);
-					getMainController().resetAutocomplete();
+					CollectionOfAutoCompletions.resetAutoCompletions();
 					this.listShortcutsController.removeRowAtIndex(this.id);
 				} catch (Exception e) {
 					Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -178,10 +200,6 @@ public class OneShortcutController {
 				this.listShortcutsController.setFocus();
 			}
 		});
-	}
-
-	private void changeWidthOfBorderPane(double width) {
-		this.mainBorderPane.setPrefWidth(width);
 	}
 
 	private void setSeparatorMouseFunction() {

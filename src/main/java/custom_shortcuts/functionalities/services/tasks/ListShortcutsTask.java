@@ -32,11 +32,11 @@ public class ListShortcutsTask extends Task<List<BorderPane>> {
 		for (int i=0; i<shortcuts.size(); i++) {
 			FXMLLoader loaderRow = new FXMLLoader(ListShortcutsWindow.class.getResource("OneShortcut.fxml"));
 			OneShortcutController oneShortcutController = new OneShortcutController(
-					this.sqlController, this.listShortcutsController, shortcuts.get(i), i);
+					this.sqlController, this.listShortcutsController, shortcuts.get(i), i+2);
 			controllers.add(oneShortcutController);
 			loaderRow.setController(oneShortcutController);
 			BorderPane newRow = loaderRow.load();
-			GridPane.setConstraints(newRow, 0, i);
+			GridPane.setConstraints(newRow, 0, i+2);
 			newRows.add(newRow);
 		}
 		this.listShortcutsController.setSubControllers(controllers);
