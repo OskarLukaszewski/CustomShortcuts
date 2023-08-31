@@ -19,8 +19,6 @@ public class CollectionOfAutoCompletions {
 	}
 
 	public static void remove(ShortcutAutoComplete shortcutAutoComplete) {
-		listOfAutoCompletions = listOfAutoCompletions.stream()
-				.filter(shortcutAutoComplete1 -> !shortcutAutoComplete1.equals(shortcutAutoComplete))
-				.collect(Collectors.toList());
+		listOfAutoCompletions.remove(shortcutAutoComplete);
 	}
 }
