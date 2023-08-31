@@ -96,11 +96,6 @@ public class MainController {
 				this.moveRectangleHoldClockService.stopService();
 			}
 		});
-		this.shortcutTextField.setOnKeyPressed(keyEvent -> {
-			if (keyEvent.getCode().equals(KeyCode.ENTER)) {
-				enterShortcut();
-			}
-		});
 		this.hideShowAnimation.setHideIcon(this.hideIcon);
 	}
 
@@ -163,7 +158,7 @@ public class MainController {
 		}
 	}
 
-	private void enterShortcut() {
+	public void enterShortcut() {
 		String rawInput = this.shortcutTextField.getText();
 		try {
 			ShortcutRobotInput shortcutRobotInput = new ShortcutRobotInput(this.sqlController, rawInput);
