@@ -34,7 +34,13 @@ public class ShortcutRobotInput {
 
 		String shortcutName = rawInput.split(" ")[0];
 		String[] shortcut = this.sqlController.getShortcut(shortcutName);
-		String[] parameters = shortcut[1].split(";");
+
+		String[] parameters;
+		if (shortcut[1].contains(";")) {
+			parameters = shortcut[1].split(";");
+		} else {
+			parameters = new String[0];
+		}
 
 		String body = shortcut[2];
 		for (int i = 0; i < Math.min(inputParameters.length, parameters.length); i++) {
