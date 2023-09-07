@@ -10,11 +10,12 @@ import static custom_shortcuts.gui.main_window.CustomShortcuts.getIcon;
 
 public class ListShortcutsWindow {
 
-	private final Stage listShortcutsStage;
+	private final Stage listShortcutsStage, mainStage;
 	private ListShortcutsController listShortcutsController;
 	private boolean isOpened;
 
-	public ListShortcutsWindow() {
+	public ListShortcutsWindow(Stage mainStage) {
+		this.mainStage = mainStage;
 		this.listShortcutsStage = new Stage();
 		this.listShortcutsController = new ListShortcutsController();
 		this.isOpened = false;
@@ -52,14 +53,9 @@ public class ListShortcutsWindow {
 			this.listShortcutsStage.setTitle("Custom Shortcuts");
 			this.listShortcutsStage.getIcons().add(getIcon());
 			this.listShortcutsStage.setMinWidth(632);
-			this.listShortcutsStage.setOnCloseRequest(windowEvent -> {
-				this.listShortcutsStage.hide();
-				this.isOpened = false;
-				this.listShortcutsController.clearRows();
-				this.listShortcutsController.clearSubControllers();
-				this.listShortcutsController = new ListShortcutsController();
-				System.gc();
-			});
+			this.listShortcutsStage.setOnCloseRequest(windowEvent -> onClose());
+			this.listShortcutsStage.maximizedProperty().addListener((observableValue, aBoolean, t1) ->
+					this.mainStage.setIconified(t1));
 			this.listShortcutsController.loadSearchTab();
 			this.listShortcutsController.displayShortcuts(newRows);
 			this.listShortcutsStage.show();
@@ -74,5 +70,14 @@ public class ListShortcutsWindow {
 			stage.getIcons().add(getIcon());
 			errorAlert.showAndWait();
 		}
+	}
+
+	private void onClose() {
+		this.listShortcutsStage.hide();
+		this.isOpened = false;
+		this.listShortcutsController.clearRows();
+		this.listShortcutsController.clearSubControllers();
+		this.listShortcutsController = new ListShortcutsController();
+		System.gc();
 	}
 }

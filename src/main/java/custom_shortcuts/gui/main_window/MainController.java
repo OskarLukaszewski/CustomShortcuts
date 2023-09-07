@@ -37,7 +37,6 @@ public class MainController {
 	private final ListShortcutsService listShortcutsService;
 	private final ShortcutRobot shortcutRobot;
 	private final MoveRectangleHoldClockService moveRectangleHoldClockService;
-	private ShortcutAutoComplete shortcutAutocomplete;
 	private double yOffset, xOffset;
 	private final SqlController sqlController;
 	private boolean fullyDraggable, movedAwayFromEdge;
@@ -62,8 +61,8 @@ public class MainController {
 
 	@FXML
 	private void initialize() {
-		this.shortcutAutocomplete = new ShortcutAutoComplete(this.sqlController, this.shortcutTextField);
-		this.shortcutAutocomplete.setMaxWidth(180);
+		ShortcutAutoComplete shortcutAutocomplete = new ShortcutAutoComplete(this.sqlController, this.shortcutTextField);
+		shortcutAutocomplete.setMaxWidth(180);
 		this.moveRectangle.setOnMousePressed(mouseEvent -> {
 			this.moveRectangle.setFill(Color.WHITE);
 			this.yOffset = mouseEvent.getSceneY();
@@ -106,7 +105,7 @@ public class MainController {
 		this.sqlController = new SqlController("jdbc:sqlite:" + dataFolder.getPath() + "\\shortcuts.db");
 		this.addShortcutWindow = new AddShortcutWindow(this.sqlController);
 		this.screenshotWindow = new ScreenshotWindow(this.sqlController, this.mainStage);
-		this.listShortcutsWindow = new ListShortcutsWindow();
+		this.listShortcutsWindow = new ListShortcutsWindow(this.mainStage);
 		this.listShortcutsService = new ListShortcutsService(
 				this.sqlController, this.listShortcutsWindow, this.mainStage);
 		this.shortcutRobot = new ShortcutRobot();
@@ -119,6 +118,10 @@ public class MainController {
 
 	public SqlController getSqlController() {
 		return this.sqlController;
+	}
+
+	public Stage getMainStage() {
+		return this.mainStage;
 	}
 
 	public void hideButtonClick() {
