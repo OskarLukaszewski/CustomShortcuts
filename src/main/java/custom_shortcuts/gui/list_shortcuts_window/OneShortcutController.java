@@ -51,6 +51,7 @@ public class OneShortcutController {
 		setOnFocus(this.nameTextField);
 		setOnFocus(this.parametersTextField);
 		setOnFocus(this.bodyTextArea);
+		setSeparatorMouseFunction();
 	}
 
 	public OneShortcutController(
@@ -72,7 +73,6 @@ public class OneShortcutController {
 	public void addParentGridPaneListener(GridPane parentGridPane) {
 		parentGridPane.widthProperty().addListener(
 				(observableValue, number, t1) -> this.mainBorderPane.setPrefWidth(t1.doubleValue()));
-		setSeparatorMouseFunction();
 	}
 
 	public int getId() {
