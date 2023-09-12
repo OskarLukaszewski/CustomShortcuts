@@ -52,9 +52,7 @@ public class ListShortcutsController {
 
 	public void displayShortcuts(List<BorderPane> newRows) {
 		this.newRows = newRows;
-		for (BorderPane newRow: this.newRows) {
-			this.gridPane.getChildren().add(newRow);
-		}
+		this.gridPane.getChildren().addAll(newRows);
 		this.scrollPane.setContent(this.gridPane);
 	}
 
@@ -78,10 +76,6 @@ public class ListShortcutsController {
 
 	public void setFocus() {
 		this.titledPane.requestFocus();
-	}
-
-	public GridPane getGridPane() {
-		return this.gridPane;
 	}
 
 	public void setSubControllers(List<OneShortcutController> subControllers) {
