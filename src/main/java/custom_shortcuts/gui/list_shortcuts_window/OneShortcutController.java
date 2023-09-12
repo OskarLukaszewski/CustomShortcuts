@@ -70,11 +70,6 @@ public class OneShortcutController {
 		this.listShortcutsController = listShortcutsController;
 	}
 
-	public void addParentGridPaneListener(GridPane parentGridPane) {
-		parentGridPane.widthProperty().addListener(
-				(observableValue, number, t1) -> this.mainBorderPane.setPrefWidth(t1.doubleValue()));
-	}
-
 	public int getId() {
 		return this.id;
 	}

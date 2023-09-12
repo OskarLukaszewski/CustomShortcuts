@@ -9,7 +9,10 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -41,6 +44,10 @@ public class ListShortcutsController {
 
 	public ListShortcutsController() {
 		this.gridPane = new GridPane();
+		ColumnConstraints columnConstraints = new ColumnConstraints();
+		columnConstraints.setFillWidth(true);
+		columnConstraints.setHgrow(Priority.ALWAYS);
+		this.gridPane.getColumnConstraints().add(columnConstraints);
 	}
 
 	public void displayShortcuts(List<BorderPane> newRows) {

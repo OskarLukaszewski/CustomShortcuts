@@ -27,7 +27,6 @@ public class ListShortcutsService extends Service<ListShortcutsTaskOutput> {
 			ListShortcutsController listShortcutsController = this.listShortcutsWindow.getController();
 			for (OneShortcutController oneShortcutController: output.getControllers()) {
 				oneShortcutController.setListShortcutsController(listShortcutsController);
-				oneShortcutController.addParentGridPaneListener(listShortcutsController.getGridPane());
 			}
 			listShortcutsController.setSubControllers(output.getControllers());
 			this.listShortcutsWindow.InitializeAndOpen(output.getRows());

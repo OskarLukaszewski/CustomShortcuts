@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.Pane?>
 
-<BorderPane fx:id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="90.0" minWidth="600.0" prefHeight="90.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="mainBorderPane" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="90.0" minWidth="600.0" prefHeight="90.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <right>
       <FlowPane maxWidth="25.0" minWidth="25.0" BorderPane.alignment="CENTER">
          <children>
@@ -36,7 +36,7 @@
       </FlowPane>
    </right>
    <center>
-      <TextArea fx:id="bodyTextArea" editable="false" promptText="Body" BorderPane.alignment="CENTER">
+      <TextArea fx:id="bodyTextArea" editable="false" maxWidth="1.7976931348623157E308" promptText="Body" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets top="10.0" />
          </BorderPane.margin>
