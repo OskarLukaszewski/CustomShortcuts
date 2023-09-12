@@ -64,6 +64,7 @@ public class MainController {
 				new ShortcutAutoComplete(this.shortcutTextField);
 		shortcutAutocomplete.setMaxWidth(180);
 		this.hideShowAnimation.setHideIcon(this.hideIcon);
+		configureMoveRectangle();
 	}
 
 	public MainController(Stage stage) {
