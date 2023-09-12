@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import java.io.IOException;
 import static custom_shortcuts.gui.main_window.CustomShortcuts.getIcon;
+import static custom_shortcuts.gui.main_window.CustomShortcuts.getMainStage;
 
 public class ScreenshotWindow {
 
@@ -19,16 +20,16 @@ public class ScreenshotWindow {
 	private final ScreenshotController controller;
 	private boolean isOpened;
 
-	public ScreenshotWindow(SqlController sqlController, Stage mainStage) {
+	public ScreenshotWindow() {
 		this.screenshotStage = new Stage();
-		this.mainStage = mainStage;
+		this.mainStage = getMainStage();
 		this.screenshotStage.initStyle(StageStyle.UNDECORATED);
 		this.screenshotStage.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
 			if (keyEvent.getCode().equals(KeyCode.ESCAPE)) {
 				close();
 			}
 		});
-		this.controller = new ScreenshotController(sqlController, this);
+		this.controller = new ScreenshotController(this);
 		this.isOpened = false;
 	}
 

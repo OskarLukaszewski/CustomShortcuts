@@ -7,7 +7,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import static custom_shortcuts.gui.main_window.CustomShortcuts.getMainController;
 
 public class SearchTabController {
 
@@ -27,7 +26,7 @@ public class SearchTabController {
 	private void initialize() {
 		GridPane.setConstraints(this.borderPane, 0, 0);
 		this.shortcutAutoComplete =
-				new ShortcutAutoComplete(getMainController().getSqlController(), this.textField);
+				new ShortcutAutoComplete(this.textField);
 		this.listShortcutsController.getGridPane().widthProperty().addListener(
 				(observableValue, number, t1) -> this.borderPane.setPrefWidth(t1.doubleValue()));
 	}

@@ -1,6 +1,5 @@
 package custom_shortcuts.gui.add_shortcut_window;
 
-import custom_shortcuts.database.SqlController;
 import custom_shortcuts.functionalities.autocompletion.CollectionOfAutoCompletions;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -9,11 +8,10 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import static custom_shortcuts.gui.main_window.CustomShortcuts.getIcon;
-import static custom_shortcuts.gui.main_window.CustomShortcuts.getMainController;
+import static custom_shortcuts.gui.main_window.CustomShortcuts.getSqlController;
 
 public class AddShortcutController {
 
-	private final SqlController sqlController;
 	private final Stage addShortcutStage;
 
 	@FXML
@@ -25,9 +23,8 @@ public class AddShortcutController {
 	@FXML
 	private Button addButton, closeButton;
 
-	public AddShortcutController(Stage addShortcutStage, SqlController sqlController) {
+	public AddShortcutController(Stage addShortcutStage) {
 		this.addShortcutStage = addShortcutStage;
-		this.sqlController = sqlController;
 	}
 
 	public void addButtonClick() {
@@ -41,7 +38,7 @@ public class AddShortcutController {
 			return;
 		} else {
 			try {
-				this.sqlController.insertShortcut(new String[] {
+				getSqlController().insertShortcut(new String[] {
 						this.nameTextField.getText(),
 						this.parametersTextField.getText(),
 						this.bodyTextArea.getText()});

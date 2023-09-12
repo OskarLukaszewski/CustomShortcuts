@@ -11,12 +11,10 @@ import java.io.IOException;
 
 public class AddShortcutWindow {
 
-	private final SqlController sqlController;
 	private final Stage addShortcutStage;
 	private boolean isInitialized, isOpened;
 
-	public AddShortcutWindow(SqlController sqlController) {
-		this.sqlController = sqlController;
+	public AddShortcutWindow() {
 		this.addShortcutStage = new Stage();
 		this.isInitialized = false;
 		this.isOpened = false;
@@ -40,7 +38,7 @@ public class AddShortcutWindow {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("AddShortcutWindow.fxml"));
 			AddShortcutController addShortcutController =
-					new AddShortcutController(this.addShortcutStage, this.sqlController);
+					new AddShortcutController(this.addShortcutStage);
 			loader.setController(addShortcutController);
 			Scene scene = new Scene(loader.load());
 			this.addShortcutStage.setScene(scene);

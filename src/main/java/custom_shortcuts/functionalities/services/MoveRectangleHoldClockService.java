@@ -1,17 +1,14 @@
 package custom_shortcuts.functionalities.services;
 
 import custom_shortcuts.functionalities.services.tasks.MoveRectangleHoldClockTask;
-import custom_shortcuts.gui.main_window.MainController;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import static custom_shortcuts.gui.main_window.CustomShortcuts.getMainController;
 
 public class MoveRectangleHoldClockService extends Service<Void> {
 
-	private final MainController mainController;
-
-	public MoveRectangleHoldClockService(MainController mainController) {
-		this.mainController = mainController;
-		setOnSucceeded(workerStateEvent -> this.mainController.setDraggable(true));
+	public MoveRectangleHoldClockService() {
+		setOnSucceeded(workerStateEvent -> getMainController().setDraggable(true));
 	}
 
 	public void startService() {

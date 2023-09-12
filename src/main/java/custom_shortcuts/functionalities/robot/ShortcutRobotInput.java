@@ -1,15 +1,13 @@
 package custom_shortcuts.functionalities.robot;
 
-import custom_shortcuts.database.SqlController;
+import static custom_shortcuts.gui.main_window.CustomShortcuts.getSqlController;
 
 public class ShortcutRobotInput {
 
-	private final SqlController sqlController;
 	private final double[] mousePosition;
 	private final String body;
 
-	public ShortcutRobotInput(SqlController sqlController, String rawInput) throws Exception {
-		this.sqlController = sqlController;
+	public ShortcutRobotInput(String rawInput) throws Exception {
 		this.mousePosition = retrieveMousePosition();
 		this.body = createBody(rawInput);
 	}
@@ -33,7 +31,7 @@ public class ShortcutRobotInput {
 		}
 
 		String shortcutName = rawInput.split(" ")[0];
-		String[] shortcut = this.sqlController.getShortcut(shortcutName);
+		String[] shortcut = getSqlController().getShortcut(shortcutName);
 
 		String[] parameters;
 		if (!shortcut[1].equals("")) {
@@ -51,6 +49,6 @@ public class ShortcutRobotInput {
 	}
 
 	private double[] retrieveMousePosition() throws Exception {
-		return this.sqlController.getMousePosition();
+		return getSqlController().getMousePosition();
 	}
 }

@@ -8,6 +8,7 @@ import javafx.animation.Timeline;
 import javafx.beans.value.WritableValue;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import static custom_shortcuts.gui.main_window.CustomShortcuts.getMainStage;
 
 public class HideShowAnimation {
 
@@ -15,11 +16,11 @@ public class HideShowAnimation {
 	private FontAwesomeIconView hideIcon;
 	private boolean isPlaying, isHidden, fullyDraggable;
 
-	public HideShowAnimation(Stage stage) {
+	public HideShowAnimation() {
 		this.isPlaying = false;
 		this.isHidden = false;
 		this.fullyDraggable = false;
-		this.mainStage = stage;
+		this.mainStage = getMainStage();
 	}
 
 	public void play() {

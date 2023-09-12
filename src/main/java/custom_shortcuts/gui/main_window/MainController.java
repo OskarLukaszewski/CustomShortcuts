@@ -19,7 +19,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -61,66 +60,34 @@ public class MainController {
 
 	@FXML
 	private void initialize() {
-		ShortcutAutoComplete shortcutAutocomplete = new ShortcutAutoComplete(this.sqlController, this.shortcutTextField);
+		ShortcutAutoComplete shortcutAutocomplete =
+				new ShortcutAutoComplete(this.shortcutTextField);
 		shortcutAutocomplete.setMaxWidth(180);
-		this.moveRectangle.setOnMousePressed(mouseEvent -> {
-			this.moveRectangle.setFill(Color.WHITE);
-			this.yOffset = mouseEvent.getSceneY();
-			if (this.fullyDraggable) {
-				this.xOffset = mouseEvent.getSceneX();
-			} else {
-				this.moveRectangleHoldClockService.startService();
-			}
-		});
-		this.moveRectangle.setOnMouseDragged(mouseEvent -> {
-			this.mainStage.setY(mouseEvent.getScreenY() - this.yOffset);
-			if (this.fullyDraggable) {
-				this.mainStage.setX(mouseEvent.getScreenX() - this.xOffset);
-				if (this.movedAwayFromEdge &&
-						this.mainStage.getX() + this.mainStage.getWidth() >=
-						Screen.getPrimary().getBounds().getWidth()) {
-					setDraggable(false);
-				}
-				if (!this.movedAwayFromEdge && Screen.getPrimary().getBounds().getWidth() - this.mainStage.getX() >
-						this.mainStage.getWidth() + 10) {
-					this.movedAwayFromEdge = true;
-				}
-			} else {
-				this.moveRectangleHoldClockService.startService();
-			}
-		});
-		this.moveRectangle.setOnMouseReleased(mouseEvent -> {
-			this.moveRectangle.setFill(Color.web("#dddddd"));
-			if (!this.fullyDraggable) {
-				this.moveRectangleHoldClockService.stopService();
-			}
-		});
 		this.hideShowAnimation.setHideIcon(this.hideIcon);
 	}
 
 	public MainController(Stage stage) {
 		this.mainStage = stage;
-		this.hideShowAnimation = new HideShowAnimation(this.mainStage);
+		this.hideShowAnimation = new HideShowAnimation();
 		DataFolder dataFolder = new DataFolder();
 		this.sqlController = new SqlController("jdbc:sqlite:" + dataFolder.getPath() + "\\shortcuts.db");
-		this.addShortcutWindow = new AddShortcutWindow(this.sqlController);
-		this.screenshotWindow = new ScreenshotWindow(this.sqlController, this.mainStage);
-		this.listShortcutsWindow = new ListShortcutsWindow(this.mainStage);
-		this.listShortcutsService = new ListShortcutsService(
-				this.sqlController, this.listShortcutsWindow, this.mainStage);
+		this.addShortcutWindow = new AddShortcutWindow();
+		this.screenshotWindow = new ScreenshotWindow();
+		this.listShortcutsWindow = new ListShortcutsWindow();
+		this.listShortcutsService = new ListShortcutsService(this.listShortcutsWindow);
 		this.shortcutRobot = new ShortcutRobot();
 		this.fullyDraggable = false;
 		this.movedAwayFromEdge = false;
-		this.moveRectangleHoldClockService = new MoveRectangleHoldClockService(this);
+		this.moveRectangleHoldClockService = new MoveRectangleHoldClockService();
 		this.yOffset = 0;
 		this.xOffset = 0;
 	}
 
-	public SqlController getSqlController() {
+	protected SqlController getSqlController() {
 		return this.sqlController;
 	}
 
-	public Stage getMainStage() {
+	protected Stage getMainStage() {
 		return this.mainStage;
 	}
 
@@ -164,7 +131,7 @@ public class MainController {
 	public void enterShortcut() {
 		String rawInput = this.shortcutTextField.getText();
 		try {
-			ShortcutRobotInput shortcutRobotInput = new ShortcutRobotInput(this.sqlController, rawInput);
+			ShortcutRobotInput shortcutRobotInput = new ShortcutRobotInput(rawInput);
 			this.shortcutRobot.enterShortcut(shortcutRobotInput);
 			this.shortcutTextField.setText("");
 		} catch (Exception e) {
@@ -175,5 +142,40 @@ public class MainController {
 			stage.getIcons().add(getIcon());
 			errorAlert.showAndWait();
 		}
+	}
+
+	private void configureMoveRectangle() {
+		this.moveRectangle.setOnMousePressed(mouseEvent -> {
+			this.moveRectangle.setFill(Color.WHITE);
+			this.yOffset = mouseEvent.getSceneY();
+			if (this.fullyDraggable) {
+				this.xOffset = mouseEvent.getSceneX();
+			} else {
+				this.moveRectangleHoldClockService.startService();
+			}
+		});
+		this.moveRectangle.setOnMouseDragged(mouseEvent -> {
+			this.mainStage.setY(mouseEvent.getScreenY() - this.yOffset);
+			if (this.fullyDraggable) {
+				this.mainStage.setX(mouseEvent.getScreenX() - this.xOffset);
+				if (this.movedAwayFromEdge &&
+						this.mainStage.getX() + this.mainStage.getWidth() >=
+								Screen.getPrimary().getBounds().getWidth()) {
+					setDraggable(false);
+				}
+				if (!this.movedAwayFromEdge && Screen.getPrimary().getBounds().getWidth() - this.mainStage.getX() >
+						this.mainStage.getWidth() + 10) {
+					this.movedAwayFromEdge = true;
+				}
+			} else {
+				this.moveRectangleHoldClockService.startService();
+			}
+		});
+		this.moveRectangle.setOnMouseReleased(mouseEvent -> {
+			this.moveRectangle.setFill(Color.web("#dddddd"));
+			if (!this.fullyDraggable) {
+				this.moveRectangleHoldClockService.stopService();
+			}
+		});
 	}
 }

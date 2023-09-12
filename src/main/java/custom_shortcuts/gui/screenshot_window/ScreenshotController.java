@@ -1,6 +1,5 @@
 package custom_shortcuts.gui.screenshot_window;
 
-import custom_shortcuts.database.SqlController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.image.ImageView;
@@ -10,12 +9,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.robot.Robot;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-
 import static custom_shortcuts.gui.main_window.CustomShortcuts.getIcon;
+import static custom_shortcuts.gui.main_window.CustomShortcuts.getSqlController;
 
 public class ScreenshotController {
 
-	private final SqlController sqlController;
 	private final ScreenshotWindow screenshotWindow;
 
 	@FXML
@@ -35,8 +33,7 @@ public class ScreenshotController {
 		});
 	}
 
-	public ScreenshotController(SqlController sqlController, ScreenshotWindow screenshotWindow) {
-		this.sqlController = sqlController;
+	public ScreenshotController(ScreenshotWindow screenshotWindow) {
 		this.screenshotWindow = screenshotWindow;
 	}
 
@@ -50,7 +47,7 @@ public class ScreenshotController {
 
 	private boolean setMousePosition(double[] mousePosition) {
 		try {
-			this.sqlController.updateMousePosition(mousePosition);
+			getSqlController().updateMousePosition(mousePosition);
 			return true;
 		} catch (Exception e) {
 			Alert errorAlert = new Alert(Alert.AlertType.ERROR);

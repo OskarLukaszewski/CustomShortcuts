@@ -4,6 +4,7 @@ import custom_shortcuts.database.SqlController;
 import javafx.scene.control.TextField;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.TextFields;
+import static custom_shortcuts.gui.main_window.CustomShortcuts.getSqlController;
 
 public class ShortcutAutoComplete {
 
@@ -12,9 +13,9 @@ public class ShortcutAutoComplete {
 	private int maxWidth = 0;
 	private AutoCompletionBinding<String> auto;
 
-	public ShortcutAutoComplete(SqlController sqlController, TextField textField) {
+	public ShortcutAutoComplete(TextField textField) {
 		CollectionOfAutoCompletions.add(this);
-		this.sqlController = sqlController;
+		this.sqlController = getSqlController();
 		this.textField = textField;
 		this.auto = TextFields.bindAutoCompletion(
 				this.textField,

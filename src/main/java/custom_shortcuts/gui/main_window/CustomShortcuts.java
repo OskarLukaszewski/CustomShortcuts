@@ -1,5 +1,6 @@
 package custom_shortcuts.gui.main_window;
 
+import custom_shortcuts.database.SqlController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -15,11 +16,13 @@ public class CustomShortcuts extends Application {
 
 	private static Image icon = null;
 	private static MainController mainController;
+	private static Stage mainStage;
 
 	@Override
 	public void start(Stage stage) throws IOException {
-		FXMLLoader fxmlLoader = new FXMLLoader(CustomShortcuts.class.getResource("CustomShortcuts.fxml"));
+		mainStage = stage;
 		mainController = new MainController(stage);
+		FXMLLoader fxmlLoader = new FXMLLoader(CustomShortcuts.class.getResource("CustomShortcuts.fxml"));
 		fxmlLoader.setController(mainController);
 		Scene scene = new Scene(fxmlLoader.load());
 		stage.setX(Screen.getPrimary().getBounds().getWidth()-230);
@@ -48,6 +51,14 @@ public class CustomShortcuts extends Application {
 
 	public static MainController getMainController() {
 		return mainController;
+	}
+
+	public static Stage getMainStage() {
+		return mainStage;
+	}
+
+	public static SqlController getSqlController() {
+		return mainController.getSqlController();
 	}
 
 }

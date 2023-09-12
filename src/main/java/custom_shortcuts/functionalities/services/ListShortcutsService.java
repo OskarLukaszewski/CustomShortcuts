@@ -1,6 +1,5 @@
 package custom_shortcuts.functionalities.services;
 
-import custom_shortcuts.database.SqlController;
 import custom_shortcuts.functionalities.services.tasks.ListShortcutsTask;
 import custom_shortcuts.gui.list_shortcuts_window.ListShortcutsWindow;
 import javafx.concurrent.Service;
@@ -10,19 +9,17 @@ import javafx.scene.control.Alert;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import java.util.List;
-
 import static custom_shortcuts.gui.main_window.CustomShortcuts.getIcon;
+import static custom_shortcuts.gui.main_window.CustomShortcuts.getMainStage;
 
 public class ListShortcutsService extends Service<List<BorderPane>> {
 
-	private final SqlController sqlController;
 	private final ListShortcutsWindow listShortcutsWindow;
 	private final Stage mainStage;
 
-	public ListShortcutsService(SqlController sqlController, ListShortcutsWindow listShortcutsWindow, Stage mainStage) {
-		this.sqlController = sqlController;
+	public ListShortcutsService(ListShortcutsWindow listShortcutsWindow) {
 		this.listShortcutsWindow = listShortcutsWindow;
-		this.mainStage = mainStage;
+		this.mainStage = getMainStage();
 
 		setOnSucceeded(workerStateEvent -> {
 			this.mainStage.getScene().setCursor(Cursor.DEFAULT);
@@ -54,6 +51,6 @@ public class ListShortcutsService extends Service<List<BorderPane>> {
 
 	@Override
 	protected Task<List<BorderPane>> createTask() {
-		return new ListShortcutsTask(this.sqlController, this.listShortcutsWindow.getController());
+		return new ListShortcutsTask(this.listShortcutsWindow.getController());
 	}
 }

@@ -7,15 +7,15 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import java.util.List;
 import static custom_shortcuts.gui.main_window.CustomShortcuts.getIcon;
+import static custom_shortcuts.gui.main_window.CustomShortcuts.getMainStage;
 
 public class ListShortcutsWindow {
 
-	private final Stage listShortcutsStage, mainStage;
+	private final Stage listShortcutsStage;
 	private ListShortcutsController listShortcutsController;
 	private boolean isOpened;
 
-	public ListShortcutsWindow(Stage mainStage) {
-		this.mainStage = mainStage;
+	public ListShortcutsWindow() {
 		this.listShortcutsStage = new Stage();
 		this.listShortcutsController = new ListShortcutsController();
 		this.isOpened = false;
@@ -55,7 +55,7 @@ public class ListShortcutsWindow {
 			this.listShortcutsStage.setMinWidth(632);
 			this.listShortcutsStage.setOnCloseRequest(windowEvent -> onClose());
 			this.listShortcutsStage.maximizedProperty().addListener((observableValue, aBoolean, t1) ->
-					this.mainStage.setIconified(t1));
+					getMainStage().setIconified(t1));
 			this.listShortcutsController.loadSearchTab();
 			this.listShortcutsController.displayShortcuts(newRows);
 			this.listShortcutsStage.show();
