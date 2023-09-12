@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
 
-<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="600.0" prefHeight="26.0" style="-fx-border-width: 0 0 1 0; -fx-border-color: gray;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="600.0" prefHeight="26.0" style="-fx-border-width: 0 0 1 0; -fx-border-color: gray;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <TextField fx:id="textField" onAction="#textFieldEnter" prefHeight="25.0" promptText="Name" style="-fx-background-radius: 0;" BorderPane.alignment="CENTER">
          <BorderPane.margin>

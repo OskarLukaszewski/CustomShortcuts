@@ -27,8 +27,6 @@ public class SearchTabController {
 		GridPane.setConstraints(this.borderPane, 0, 0);
 		this.shortcutAutoComplete =
 				new ShortcutAutoComplete(this.textField);
-		this.listShortcutsController.getGridPane().widthProperty().addListener(
-				(observableValue, number, t1) -> this.borderPane.setPrefWidth(t1.doubleValue()));
 	}
 
 	public SearchTabController(ListShortcutsController listShortcutsController) {
