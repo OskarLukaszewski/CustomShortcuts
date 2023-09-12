@@ -23,8 +23,7 @@ public class OneShortcutController {
 	private double initialHeight;
 	private final int id;
 	private final SqlController sqlController;
-	private final GridPane parentGridPane;
-	private final ListShortcutsController listShortcutsController;
+	private ListShortcutsController listShortcutsController;
 
 	@FXML
 	private BorderPane mainBorderPane;
@@ -52,22 +51,28 @@ public class OneShortcutController {
 		setOnFocus(this.nameTextField);
 		setOnFocus(this.parametersTextField);
 		setOnFocus(this.bodyTextArea);
-		this.parentGridPane.widthProperty().addListener(
-				(observableValue, number, t1) -> this.mainBorderPane.setPrefWidth(t1.doubleValue()));
-		setSeparatorMouseFunction();
 	}
 
 	public OneShortcutController(
-			SqlController sqlController, ListShortcutsController listShortcutsController, String[] shortcut, int id) {
+			SqlController sqlController, String[] shortcut, int id) {
 		this.sqlController = sqlController;
-		this.listShortcutsController = listShortcutsController;
-		this.parentGridPane = this.listShortcutsController.getGridPane();
 		this.isEditOn = false;
 		this.isDragOn = false;
 		this.shortcut = shortcut;
 		this.id = id;
 		this.yOffSet = 0;
 		this.initialHeight = 0;
+	}
+
+	public void setListShortcutsController(
+			ListShortcutsController listShortcutsController) {
+		this.listShortcutsController = listShortcutsController;
+	}
+
+	public void addParentGridPaneListener(GridPane parentGridPane) {
+		parentGridPane.widthProperty().addListener(
+				(observableValue, number, t1) -> this.mainBorderPane.setPrefWidth(t1.doubleValue()));
+		setSeparatorMouseFunction();
 	}
 
 	public int getId() {

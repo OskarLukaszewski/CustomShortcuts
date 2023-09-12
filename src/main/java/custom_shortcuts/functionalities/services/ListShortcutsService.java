@@ -1,18 +1,18 @@
 package custom_shortcuts.functionalities.services;
 
 import custom_shortcuts.functionalities.services.tasks.ListShortcutsTask;
+import custom_shortcuts.gui.list_shortcuts_window.ListShortcutsController;
 import custom_shortcuts.gui.list_shortcuts_window.ListShortcutsWindow;
+import custom_shortcuts.gui.list_shortcuts_window.OneShortcutController;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import java.util.List;
 import static custom_shortcuts.gui.main_window.CustomShortcuts.getIcon;
 import static custom_shortcuts.gui.main_window.CustomShortcuts.getMainStage;
 
-public class ListShortcutsService extends Service<List<BorderPane>> {
+public class ListShortcutsService extends Service<ListShortcutsTaskOutput> {
 
 	private final ListShortcutsWindow listShortcutsWindow;
 	private final Stage mainStage;
@@ -23,7 +23,14 @@ public class ListShortcutsService extends Service<List<BorderPane>> {
 
 		setOnSucceeded(workerStateEvent -> {
 			this.mainStage.getScene().setCursor(Cursor.DEFAULT);
-			this.listShortcutsWindow.InitializeAndOpen(getValue());
+			ListShortcutsTaskOutput output = getValue();
+			ListShortcutsController listShortcutsController = this.listShortcutsWindow.getController();
+			for (OneShortcutController oneShortcutController: output.getControllers()) {
+				oneShortcutController.setListShortcutsController(listShortcutsController);
+				oneShortcutController.addParentGridPaneListener(listShortcutsController.getGridPane());
+			}
+			listShortcutsController.setSubControllers(output.getControllers());
+			this.listShortcutsWindow.InitializeAndOpen(output.getRows());
 		});
 
 		setOnFailed(workerStateEvent -> {
@@ -50,7 +57,7 @@ public class ListShortcutsService extends Service<List<BorderPane>> {
 
 
 	@Override
-	protected Task<List<BorderPane>> createTask() {
-		return new ListShortcutsTask(this.listShortcutsWindow.getController());
+	protected Task<ListShortcutsTaskOutput> createTask() {
+		return new ListShortcutsTask();
 	}
 }
