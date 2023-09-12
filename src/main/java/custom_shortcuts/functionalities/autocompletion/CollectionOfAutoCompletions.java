@@ -2,11 +2,10 @@ package custom_shortcuts.functionalities.autocompletion;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CollectionOfAutoCompletions {
 
-	private static List<ShortcutAutoComplete> listOfAutoCompletions = new ArrayList<>();
+	private static final List<ShortcutAutoComplete> listOfAutoCompletions = new ArrayList<>();
 
 	public static void add(ShortcutAutoComplete shortcutAutocomplete) {
 		listOfAutoCompletions.add(shortcutAutocomplete);
