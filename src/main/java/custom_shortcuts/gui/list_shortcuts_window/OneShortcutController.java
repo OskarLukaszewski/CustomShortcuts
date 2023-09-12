@@ -157,7 +157,11 @@ public class OneShortcutController {
 				try {
 					this.sqlController.deleteShortcut(this.shortcut[0]);
 					CollectionOfAutoCompletions.resetAutoCompletions();
-					this.listShortcutsController.removeRowAtIndex(this.id);
+					if (this.isMovedToTop()) {
+						this.listShortcutsController.removeRowAtIndex(1);
+					} else {
+						this.listShortcutsController.removeRowAtIndex(this.id);
+					}
 				} catch (Exception e) {
 					Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 					errorAlert.setHeaderText("Operation failed");
