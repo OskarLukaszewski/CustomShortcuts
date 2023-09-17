@@ -44,12 +44,6 @@ public class MainController {
 	private TextField shortcutTextField;
 
 	@FXML
-	private ToolBar toolbar;
-
-	@FXML
-	private GridPane mainGridPane;
-
-	@FXML
 	private FontAwesomeIconView hideIcon, moveRectangleIcon;
 
 	@FXML
