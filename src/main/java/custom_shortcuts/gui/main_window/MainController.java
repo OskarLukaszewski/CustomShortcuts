@@ -41,9 +41,6 @@ public class MainController {
 	private boolean fullyDraggable, movedAwayFromEdge;
 
 	@FXML
-	private Button hideButton, closeButton, addButton, listButton, locationButton;
-
-	@FXML
 	private TextField shortcutTextField;
 
 	@FXML
