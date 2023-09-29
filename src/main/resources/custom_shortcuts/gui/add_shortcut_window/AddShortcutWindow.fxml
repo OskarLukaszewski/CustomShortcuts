@@ -61,7 +61,7 @@
                   </Button>
                </children>
             </FlowPane>
-            <TextArea fx:id="bodyTextArea" promptText="Body" GridPane.rowIndex="1" />
+            <TextArea fx:id="bodyTextArea" promptText="Body" wrapText="true" GridPane.rowIndex="1" />
          </children>
       </GridPane>
    </content>
