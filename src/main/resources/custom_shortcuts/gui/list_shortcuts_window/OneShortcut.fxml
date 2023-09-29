@@ -36,7 +36,7 @@
       </FlowPane>
    </right>
    <center>
-      <TextArea fx:id="bodyTextArea" editable="false" maxWidth="1.7976931348623157E308" promptText="Body" BorderPane.alignment="CENTER">
+      <TextArea fx:id="bodyTextArea" editable="false" maxWidth="1.7976931348623157E308" promptText="Body" wrapText="true" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets top="10.0" />
          </BorderPane.margin>
