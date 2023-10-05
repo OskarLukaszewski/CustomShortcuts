@@ -1,5 +1,6 @@
 package custom_shortcuts.gui.main_window;
 
+import custom_shortcuts.database.DataFolder;
 import custom_shortcuts.database.SqlController;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -59,6 +60,10 @@ public class CustomShortcuts extends Application {
 
 	public static SqlController getSqlController() {
 		return mainController.getSqlController();
+	}
+
+	public static DataFolder getDataFolder() {
+		return mainController.getDataFolder();
 	}
 
 }

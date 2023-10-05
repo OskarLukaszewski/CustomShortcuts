@@ -35,6 +35,7 @@ public class MainController {
 	private final MoveRectangleHoldClockService moveRectangleHoldClockService;
 	private double yOffset, xOffset;
 	private final SqlController sqlController;
+	private final DataFolder dataFolder;
 	private boolean fullyDraggable, movedAwayFromEdge;
 
 	@FXML
@@ -58,8 +59,8 @@ public class MainController {
 	public MainController(Stage stage) {
 		this.mainStage = stage;
 		this.hideShowAnimation = new HideShowAnimation();
-		DataFolder dataFolder = new DataFolder();
-		this.sqlController = new SqlController("jdbc:sqlite:" + dataFolder.getPath() + "\\shortcuts.db");
+		this.dataFolder = new DataFolder();
+		this.sqlController = new SqlController("jdbc:sqlite:" + this.dataFolder.getPath() + "\\shortcuts.db");
 		this.addShortcutWindow = new AddShortcutWindow();
 		this.screenshotWindow = new ScreenshotWindow();
 		this.listShortcutsWindow = new ListShortcutsWindow();
@@ -74,6 +75,10 @@ public class MainController {
 
 	protected SqlController getSqlController() {
 		return this.sqlController;
+	}
+
+	protected DataFolder getDataFolder() {
+		return this.dataFolder;
 	}
 
 	protected Stage getMainStage() {
