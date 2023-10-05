@@ -76,17 +76,17 @@
                 <RowConstraints maxHeight="40.0" minHeight="40.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="65.0" text="File path" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <Button fx:id="filePathButton" disable="true" mnemonicParsing="false" onAction="#filePathButtonClick" prefHeight="25.0" prefWidth="65.0" text="File path" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets bottom="5.0" />
                      </GridPane.margin>
                   </Button>
-                  <TextField editable="false" prefHeight="25.0" GridPane.rowIndex="1">
+                  <TextField fx:id="filePathTextField" disable="true" editable="false" prefHeight="25.0" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets bottom="5.0" right="10.0" />
                      </GridPane.margin>
                   </TextField>
-                  <CheckBox mnemonicParsing="false" text="Include a picture">
+                  <CheckBox fx:id="includePictureCheckBox" mnemonicParsing="false" text="Include a picture">
                      <GridPane.margin>
                         <Insets top="10.0" />
                      </GridPane.margin>

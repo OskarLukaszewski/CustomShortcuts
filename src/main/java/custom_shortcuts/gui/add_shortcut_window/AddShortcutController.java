@@ -2,29 +2,51 @@ package custom_shortcuts.gui.add_shortcut_window;
 
 import custom_shortcuts.functionalities.autocompletion.CollectionOfAutoCompletions;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import java.io.File;
 import static custom_shortcuts.gui.main_window.CustomShortcuts.getIcon;
 import static custom_shortcuts.gui.main_window.CustomShortcuts.getSqlController;
 
 public class AddShortcutController {
 
 	private final Stage addShortcutStage;
+	private boolean includePicture;
 
 	@FXML
-	private TextField nameTextField, parametersTextField;
+	private TextField nameTextField, parametersTextField, filePathTextField;
 
 	@FXML
 	private TextArea bodyTextArea;
 
 	@FXML
-	private Button addButton, closeButton;
+	private Button addButton, closeButton, filePathButton;
+
+	@FXML
+	private CheckBox includePictureCheckBox;
+
+	@FXML
+	private void initialize() {
+		this.includePictureCheckBox.selectedProperty()
+				.addListener((observableValue, aBoolean, t1) -> setIncludePictureElement(t1));
+	}
 
 	public AddShortcutController(Stage addShortcutStage) {
 		this.addShortcutStage = addShortcutStage;
+	}
+
+	public void filePathButtonClick() {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Select a picture");
+		fileChooser.getExtensionFilters().addAll(
+				new FileChooser.ExtensionFilter("IMAGE FILES", "*.jpg", "*.png"),
+				new FileChooser.ExtensionFilter("ALL FILES", "*.*")
+		);
+		File file = fileChooser.showOpenDialog(this.addShortcutStage.getScene().getWindow());
+		if (file != null) {
+			this.filePathTextField.setText(file.getPath());
+		}
 	}
 
 	public void addButtonClick() {
@@ -65,5 +87,12 @@ public class AddShortcutController {
 		this.parametersTextField.setText("");
 		this.bodyTextArea.setText("");
 		this.addShortcutStage.hide();
+	}
+
+	private void setIncludePictureElement(boolean includePicture) {
+		this.includePicture = includePicture;
+		this.filePathTextField.setDisable(!includePicture);
+		this.filePathTextField.setEditable(includePicture);
+		this.filePathButton.setDisable(!includePicture);
 	}
 }
