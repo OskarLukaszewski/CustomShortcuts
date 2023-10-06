@@ -3,6 +3,7 @@ package custom_shortcuts.database;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import static custom_shortcuts.gui.main_window.CustomShortcuts.getDataFolder;
 
 public class SqlController {
 
@@ -20,7 +21,9 @@ public class SqlController {
 				"CREATE TABLE IF NOT EXISTS shortcuts (" +
 				"name text PRIMARY KEY," +
 				"parameters text," +
-				"body text NOT NULL" +
+				"body text," +
+				"includes_picture text," +
+				"path_to_picture text" +
 				");";
 		String sql2 =
 				"CREATE TABLE IF NOT EXISTS mouse_position (" +
@@ -44,7 +47,7 @@ public class SqlController {
 		}
 	}
 
-	public double[] getMousePosition() throws Exception {
+	public double[] getMousePosition() throws SqlControllerException {
 		double[] result = new double[2];
 		String sql = "SELECT x_position, y_position FROM mouse_position";
 		Statement stmt;
@@ -56,12 +59,12 @@ public class SqlController {
 				result[1] = rs.getDouble("y_position");
 			}
 		} catch (SQLException e) {
-			throw new Exception("Couldn't get mouse position from database.");
+			throw new SqlControllerException("Couldn't get mouse position from database.");
 		}
 		return result;
 	}
 
-	public void updateMousePosition(double[] newMousePosition) throws Exception {
+	public void updateMousePosition(double[] newMousePosition) throws SqlControllerException {
 		String sql = "UPDATE mouse_position SET x_position = ?, y_position = ?;";
 		PreparedStatement stmt;
 		try {
@@ -70,20 +73,22 @@ public class SqlController {
 			stmt.setDouble(2, newMousePosition[1]);
 			stmt.execute();
 		} catch (SQLException e) {
-			throw new Exception("Couldn't access database to update mouse position.");
+			throw new SqlControllerException("Couldn't access database to update mouse position.");
 		}
 	}
 
-	public void insertShortcut(String[] shortcut) throws Exception {
+	public void insertShortcut(String[] shortcut) throws SqlControllerException {
 		String sql = "INSERT INTO shortcuts (" +
 				"name," +
 				"parameters," +
-				"body" +
+				"body," +
+				"includes_picture" +
 				")" +
 				"VALUES (" +
 				"?," +
 				"?," +
-				"?" +
+				"?," +
+				"'false'" +
 				");";
 		PreparedStatement stmt;
 		try {
@@ -94,15 +99,33 @@ public class SqlController {
 			stmt.execute();
 		} catch (SQLException e) {
 			if (e.getMessage().contains("A PRIMARY KEY constraint failed")) {
-				throw new Exception("This shortcut already exists.");
+				throw new SqlControllerException("This shortcut already exists.");
 			}
 			throw new RuntimeException(e);
 		}
 	}
 
-	public String[] getShortcut(String name) throws Exception {
-		String[] result = new String[3];
-		String sql = "SELECT name, parameters, body FROM shortcuts WHERE name = ?;";
+	public void addPictureToShortcut(String name, String path) throws SqlControllerException {
+		String sql = "UPDATE shortcuts " +
+				"SET includes_picture = 'true', path_to_picture = ? " +
+				"WHERE name = ?;";
+		PreparedStatement stmt;
+		try {
+			stmt = this.conn.prepareStatement(sql);
+			stmt.setString(1, path);
+			stmt.setString(2, name);
+			stmt.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SqlControllerException("The provided picture couldn't be added to the data folder.");
+		}
+	}
+
+	public String[] getShortcut(String name) throws SqlControllerException {
+		String[] result = new String[5];
+		String sql = "SELECT name, parameters, body, includes_picture, path_to_picture " +
+				"FROM shortcuts " +
+				"WHERE name = ?;";
 		PreparedStatement stmt;
 		try {
 			stmt = this.conn.prepareStatement(sql);
@@ -112,14 +135,16 @@ public class SqlController {
 				result[0] = rs.getString("name");
 				result[1] = rs.getString("parameters");
 				result[2] = rs.getString("body");
+				result[3] = rs.getString("includes_picture");
+				result[4] = rs.getString("path_to_picture");
 			}
 		} catch (SQLException e) {
-			throw new Exception("Couldn't retrieve shortcut from database.");
+			throw new SqlControllerException("Couldn't retrieve shortcut from database.");
 		}
 		return result;
 	}
 
-	public List<String[]> getAllShortcuts() throws Exception {
+	public List<String[]> getAllShortcuts() throws SqlControllerException {
 		List<String[]> result = new ArrayList<>();
 		String sql = "SELECT * FROM shortcuts;";
 		Statement stmt;
@@ -130,10 +155,12 @@ public class SqlController {
 				result.add(new String[] {
 						rs.getString("name"),
 						rs.getString("parameters"),
-						rs.getString("body")});
+						rs.getString("body"),
+						rs.getString("includes_picture"),
+						rs.getString("path_to_picture")});
 			}
 		} catch (SQLException e) {
-			throw new Exception("Couldn't load all shortcuts.");
+			throw new SqlControllerException("Couldn't load all shortcuts.");
 		}
 		return result;
 	}
@@ -150,36 +177,57 @@ public class SqlController {
 				result.add(rs.getString("name"));
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
 			return new ArrayList<>();
 		}
 		return result;
 	}
 
-	public void deleteShortcut(String name) throws Exception {
-		String sql = "DELETE FROM shortcuts WHERE name = ?;";
-		PreparedStatement stmt;
+	public void deleteShortcut(String name) throws SqlControllerException, DataFolderException {
+		String sql1 = "SELECT includes_picture, path_to_picture FROM shortcuts WHERE name = ?;";
+		PreparedStatement stmt1;
+		String[] result = new String[2];
 		try {
-			stmt = this.conn.prepareStatement(sql);
-			stmt.setString(1, name);
-			stmt.execute();
+			stmt1 = this.conn.prepareStatement(sql1);
+			stmt1.setString(1, name);
+			ResultSet rs = stmt1.executeQuery();
+			while(rs.next()) {
+				result[0] = rs.getString("includes_picture");
+				result[1] = rs.getString("path_to_picture");
+			}
 		} catch (SQLException e) {
-			throw new Exception("Couldn't remove shortcut from database.");
+			throw new SqlControllerException("Couldn't remove shortcut from database.");
+		}
+
+		String sql2 = "DELETE FROM shortcuts WHERE name = ?;";
+		PreparedStatement stmt2;
+		try {
+			stmt2 = this.conn.prepareStatement(sql2);
+			stmt2.setString(1, name);
+			stmt2.execute();
+			if (result[0].equals("true")) {
+				getDataFolder().deletePicture(result[1]);
+			}
+		} catch (SQLException e) {
+			throw new SqlControllerException("Couldn't remove shortcut from database.");
 		}
 	}
 
-	public void updateShortcut(String oldShortcutName, String[] newShortcut) throws Exception {
-		String sql = "UPDATE shortcuts SET name = ?, parameters = ?, body = ? WHERE name = ?;";
+	public void updateShortcut(String oldShortcutName, String[] newShortcut) throws SqlControllerException {
+		String sql = "UPDATE shortcuts " +
+				"SET name = ?, parameters = ?, body = ?, includes_picture = ?, path_to_picture = ? " +
+				"WHERE name = ?;";
 		PreparedStatement stmt;
 		try {
 			stmt = this.conn.prepareStatement(sql);
 			stmt.setString(1, newShortcut[0]);
 			stmt.setString(2, newShortcut[1]);
 			stmt.setString(3, newShortcut[2]);
-			stmt.setString(4, oldShortcutName);
+			stmt.setString(4, newShortcut[3]);
+			stmt.setString(5, newShortcut[4]);
+			stmt.setString(6, oldShortcutName);
 			stmt.execute();
 		} catch (SQLException e) {
-			throw new Exception("Couldn't update shortcut in database.");
+			throw new SqlControllerException("Couldn't update shortcut in database.");
 		}
 	}
 

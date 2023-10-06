@@ -3,6 +3,7 @@ package custom_shortcuts.gui.main_window;
 import custom_shortcuts.animations.HideShowAnimation;
 import custom_shortcuts.database.DataFolder;
 import custom_shortcuts.database.SqlController;
+import custom_shortcuts.database.SqlControllerException;
 import custom_shortcuts.functionalities.autocompletion.ShortcutAutoComplete;
 import custom_shortcuts.functionalities.robot.ShortcutRobot;
 import custom_shortcuts.functionalities.robot.ShortcutRobotInput;
@@ -128,7 +129,7 @@ public class MainController {
 			ShortcutRobotInput shortcutRobotInput = new ShortcutRobotInput(rawInput);
 			this.shortcutRobot.enterShortcut(shortcutRobotInput);
 			this.shortcutTextField.setText("");
-		} catch (Exception e) {
+		} catch (SqlControllerException e) {
 			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 			errorAlert.setHeaderText("Database error");
 			errorAlert.setContentText("Couldn't construct message from database.");

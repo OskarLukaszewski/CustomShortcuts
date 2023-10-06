@@ -1,6 +1,8 @@
 package custom_shortcuts.gui.list_shortcuts_window;
 
+import custom_shortcuts.database.DataFolderException;
 import custom_shortcuts.database.SqlController;
+import custom_shortcuts.database.SqlControllerException;
 import custom_shortcuts.functionalities.autocompletion.CollectionOfAutoCompletions;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -113,7 +115,7 @@ public class OneShortcutController {
 					this.sqlController.updateShortcut(this.shortcut[0], newShortcut);
 					CollectionOfAutoCompletions.resetAutoCompletions();
 					this.shortcut = newShortcut;
-				} catch (Exception e) {
+				} catch (SqlControllerException e) {
 					Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 					errorAlert.setHeaderText("Operation failed");
 					errorAlert.setContentText(e.getMessage());
@@ -162,13 +164,26 @@ public class OneShortcutController {
 					} else {
 						this.listShortcutsController.removeRowAtIndex(this.id);
 					}
-				} catch (Exception e) {
+				} catch (SqlControllerException e) {
 					Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 					errorAlert.setHeaderText("Operation failed");
 					errorAlert.setContentText(e.getMessage());
 					Stage stage2 = (Stage) errorAlert.getDialogPane().getScene().getWindow();
 					stage2.getIcons().add(getIcon());
 					errorAlert.showAndWait();
+				} catch (DataFolderException e) {
+					Alert errorAlert = new Alert(Alert.AlertType.INFORMATION);
+					errorAlert.setHeaderText("Operation failed");
+					errorAlert.setContentText(e.getMessage());
+					Stage stage2 = (Stage) errorAlert.getDialogPane().getScene().getWindow();
+					stage2.getIcons().add(getIcon());
+					errorAlert.showAndWait();
+					CollectionOfAutoCompletions.resetAutoCompletions();
+					if (this.isMovedToTop()) {
+						this.listShortcutsController.removeRowAtIndex(1);
+					} else {
+						this.listShortcutsController.removeRowAtIndex(this.id);
+					}
 				}
 			}
 		}

@@ -5,6 +5,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 import java.util.List;
 import static custom_shortcuts.gui.main_window.CustomShortcuts.getIcon;
 import static custom_shortcuts.gui.main_window.CustomShortcuts.getMainStage;
@@ -61,7 +63,7 @@ public class ListShortcutsWindow {
 			this.listShortcutsStage.show();
 			this.listShortcutsController.setFocus();
 			this.isOpened = true;
-		} catch (Exception e) {
+		} catch (IOException e) {
 			this.isOpened = false;
 			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 			errorAlert.setHeaderText("Window cannot be opened");

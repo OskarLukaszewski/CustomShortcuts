@@ -1,5 +1,6 @@
 package custom_shortcuts.gui.screenshot_window;
 
+import custom_shortcuts.database.SqlControllerException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.image.ImageView;
@@ -49,7 +50,7 @@ public class ScreenshotController {
 		try {
 			getSqlController().updateMousePosition(mousePosition);
 			return true;
-		} catch (Exception e) {
+		} catch (SqlControllerException e) {
 			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 			errorAlert.setHeaderText("Error during updating mouse position");
 			errorAlert.setContentText(e.getMessage());

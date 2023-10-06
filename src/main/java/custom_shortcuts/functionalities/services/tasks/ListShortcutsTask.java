@@ -1,5 +1,6 @@
 package custom_shortcuts.functionalities.services.tasks;
 
+import custom_shortcuts.database.SqlControllerException;
 import custom_shortcuts.functionalities.services.ListShortcutsTaskOutput;
 import custom_shortcuts.gui.list_shortcuts_window.ListShortcutsWindow;
 import custom_shortcuts.gui.list_shortcuts_window.OneShortcutController;
@@ -7,6 +8,8 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -16,7 +19,7 @@ import static custom_shortcuts.gui.main_window.CustomShortcuts.getSqlController;
 public class ListShortcutsTask extends Task<ListShortcutsTaskOutput> {
 
 	@Override
-	protected ListShortcutsTaskOutput call() throws Exception {
+	protected ListShortcutsTaskOutput call() throws SqlControllerException, IOException {
 		List<String[]> shortcuts = getSqlController().getAllShortcuts().stream()
 				.sorted(Comparator.comparing(arr -> arr[0]))
 				.collect(Collectors.toList());
