@@ -1,9 +1,11 @@
 package custom_shortcuts.gui.list_shortcuts_window;
 
+import custom_shortcuts.gui.show_picture_window.ShowPictureWindow;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -23,6 +25,7 @@ public class ListShortcutsController {
 	private List<OneShortcutController> subControllers;
 	private SearchTabController searchTabController;
 	private List<BorderPane> newRows;
+	private ShowPictureWindow showPictureWindow;
 
 	@FXML
 	private ScrollPane scrollPane;
@@ -48,6 +51,11 @@ public class ListShortcutsController {
 		columnConstraints.setFillWidth(true);
 		columnConstraints.setHgrow(Priority.ALWAYS);
 		this.gridPane.getColumnConstraints().add(columnConstraints);
+		this.showPictureWindow = new ShowPictureWindow();
+	}
+
+	public void showPicture(Image picture) {
+		this.showPictureWindow.open(picture);
 	}
 
 	public void displayShortcuts(List<BorderPane> newRows) {

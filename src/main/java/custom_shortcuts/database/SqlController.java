@@ -34,7 +34,45 @@ public class SqlController {
 				"INSERT INTO mouse_position " +
 				"SELECT 0, 0 " +
 				"WHERE NOT EXISTS (SELECT * FROM mouse_position);";
+		String sql4 =
+				"CREATE TABLE IF NOT EXISTS version (" +
+				"current_version text" +
+				");";
+		Statement stmt;
+		try {
+			stmt = this.conn.createStatement();
+			stmt.addBatch(sql1);
+			stmt.addBatch(sql2);
+			stmt.addBatch(sql3);
+			stmt.addBatch(sql4);
+			stmt.executeBatch();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		if (!isCurrentVersion()) {
+			updateToCurrentVersion();
+		}
+	}
 
+	private boolean isCurrentVersion() {
+		String sql =
+				"SELECT EXISTS (SELECT 1 FROM version);";
+		Statement stmt;
+		try {
+			stmt = this.conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			rs.next();
+			return rs.getInt(1) == 1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
+	private void updateToCurrentVersion() {
+		String sql1 = "ALTER TABLE shortcuts ADD COLUMN includes_picture NOT NULL DEFAULT 'false';";
+		String sql2 = "ALTER TABLE shortcuts ADD COLUMN path_to_picture text;";
+		String sql3 = "INSERT INTO version SELECT '2.0' WHERE NOT EXISTS (SELECT * FROM version);";
 		Statement stmt;
 		try {
 			stmt = this.conn.createStatement();
@@ -117,7 +155,35 @@ public class SqlController {
 			stmt.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new SqlControllerException("The provided picture couldn't be added to the data folder.");
+			throw new SqlControllerException("The provided picture couldn't be added to the database.");
+		}
+	}
+
+	public void removePictureFromShortcut(String name) throws SqlControllerException {
+		String sql = "UPDATE shortcuts SET includes_picture = 'false', path_to_picture = NULL WHERE name = ?;";
+		PreparedStatement stmt;
+		try {
+			stmt = this.conn.prepareStatement(sql);
+			stmt.setString(1, name);
+			stmt.execute();
+		} catch (SQLException e) {
+			throw  new SqlControllerException("The picture couldn't be deleted from the database.");
+		}
+	}
+
+	public void changePictureInShortcut(String name, String path) throws SqlControllerException {
+		String sql = "UPDATE shortcuts " +
+				"SET path_to_picture = ? " +
+				"WHERE name = ?;";
+		PreparedStatement stmt;
+		try {
+			stmt = this.conn.prepareStatement(sql);
+			stmt.setString(1, path);
+			stmt.setString(2, name);
+			stmt.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SqlControllerException("The picture couldn't be changed.");
 		}
 	}
 
@@ -139,7 +205,7 @@ public class SqlController {
 				result[4] = rs.getString("path_to_picture");
 			}
 		} catch (SQLException e) {
-			throw new SqlControllerException("Couldn't retrieve shortcut from database.");
+			throw new SqlControllerException("Couldn't retrieve the shortcut from the database.");
 		}
 		return result;
 	}
@@ -214,7 +280,7 @@ public class SqlController {
 
 	public void updateShortcut(String oldShortcutName, String[] newShortcut) throws SqlControllerException {
 		String sql = "UPDATE shortcuts " +
-				"SET name = ?, parameters = ?, body = ?, includes_picture = ?, path_to_picture = ? " +
+				"SET name = ?, parameters = ?, body = ? " +
 				"WHERE name = ?;";
 		PreparedStatement stmt;
 		try {
@@ -222,9 +288,7 @@ public class SqlController {
 			stmt.setString(1, newShortcut[0]);
 			stmt.setString(2, newShortcut[1]);
 			stmt.setString(3, newShortcut[2]);
-			stmt.setString(4, newShortcut[3]);
-			stmt.setString(5, newShortcut[4]);
-			stmt.setString(6, oldShortcutName);
+			stmt.setString(4, oldShortcutName);
 			stmt.execute();
 		} catch (SQLException e) {
 			throw new SqlControllerException("Couldn't update shortcut in database.");

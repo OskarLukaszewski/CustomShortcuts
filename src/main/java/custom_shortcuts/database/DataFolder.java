@@ -38,8 +38,9 @@ public class DataFolder extends File {
 		String extension = originalName.substring(originalName.lastIndexOf('.'));
 		TemporaryPicture copiedFile =
 				new TemporaryPicture(this.pictureFolder.getPath() + "\\" + uniqueName + ".tmp", extension);
-		File potentialFutureFile = new File(this.pictureFolder.getPath() + "\\" + uniqueName + extension);
-		if ((copiedFile.exists() && !copiedFile.delete()) || potentialFutureFile.exists()) {
+		boolean potentialFutureFileExists =
+				Files.exists(Path.of(this.pictureFolder.getPath() + "\\" + uniqueName + extension));
+		if ((copiedFile.exists() && !copiedFile.delete()) || potentialFutureFileExists) {
 			throw new DataFolderException("A picture with that name is already saved.");
 		}
 		try {
@@ -52,8 +53,36 @@ public class DataFolder extends File {
 
 	public void deletePicture(String name) throws DataFolderException {
 		File picture = new File(this.pictureFolder + "\\" + name);
-		if (!picture.exists() || !picture.delete()) {
+		if (!picture.exists()) {
+			return;
+		}
+		if (!picture.delete()) {
 			throw new DataFolderException("The picture couldn't be deleted from the data folder.");
+		}
+	}
+
+	public String changePicture(String sourcePath, String name) throws DataFolderException {
+		String extension = sourcePath.substring(sourcePath.lastIndexOf('.'));
+		String nameWithoutExtension = name.substring(0, name.lastIndexOf('.'));
+		String newName = nameWithoutExtension + extension;
+		try {
+			Files.copy(Path.of(sourcePath), Path.of(this.pictureFolder + "\\" + newName),
+					StandardCopyOption.REPLACE_EXISTING);
+			if (!name.equals(newName)) {
+				deletePicture(name);
+			}
+			return newName;
+		} catch (IOException e) {
+			throw new DataFolderException("The picture couldn't be changed.");
+		}
+	}
+
+	public Path getPathToPicture(String name) {
+		Path path = Path.of(this.pictureFolder + "\\" + name);
+		if (Files.exists(path)) {
+			return path;
+		} else {
+			return null;
 		}
 	}
 

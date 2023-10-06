@@ -1,21 +1,28 @@
 package custom_shortcuts.functionalities.robot;
 
+import custom_shortcuts.functionalities.services.SchedulePastingPictureService;
+import javafx.scene.image.Image;
 import javafx.scene.input.*;
 import javafx.scene.robot.Robot;
 
 public class ShortcutRobot {
 
 	private final Robot robot;
+	private final SchedulePastingPictureService schedulePastingPictureService;
 
 	public ShortcutRobot() {
 		this.robot = new Robot();
+		this.schedulePastingPictureService = new SchedulePastingPictureService(this);
 	}
 
 	public void enterShortcut(ShortcutRobotInput shortcutRobotInput) {
 		double oldPositionX = this.robot.getMouseX();
 		double oldPositionY = this.robot.getMouseY();
 		click(shortcutRobotInput.getMousePosition());
-		paste(shortcutRobotInput.getBody());
+		pasteBody(shortcutRobotInput.getBody());
+		if (shortcutRobotInput.doesIncludePicture()) {
+			this.schedulePastingPictureService.startService(shortcutRobotInput.getPicture());
+		}
 		returnMouse(oldPositionX, oldPositionY);
 	}
 
@@ -24,7 +31,7 @@ public class ShortcutRobot {
 		this.robot.mouseClick(MouseButton.PRIMARY);
 	}
 
-	private void paste(String text) {
+	private void pasteBody(String text) {
 		ClipboardContent content = new ClipboardContent();
 		content.putString(text);
 		Clipboard.getSystemClipboard().setContent(content);
@@ -32,6 +39,20 @@ public class ShortcutRobot {
 		this.robot.keyPress(KeyCode.V);
 		this.robot.keyRelease(KeyCode.V);
 		this.robot.keyRelease(KeyCode.CONTROL);
+	}
+
+	public void pastePicture(Image picture) {
+		ClipboardContent content = new ClipboardContent();
+		content.putImage(picture);
+		Clipboard.getSystemClipboard().setContent(content);
+		this.robot.keyPress(KeyCode.CONTROL);
+		this.robot.keyPress(KeyCode.V);
+		this.robot.keyRelease(KeyCode.V);
+		this.robot.keyRelease(KeyCode.CONTROL);
+	}
+
+	private void enter() {
+		this.robot.keyPress(KeyCode.ENTER);
 	}
 
 	private void returnMouse(double positionX, double positionY) {

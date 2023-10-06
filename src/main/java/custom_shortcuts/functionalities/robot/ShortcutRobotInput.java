@@ -1,17 +1,31 @@
 package custom_shortcuts.functionalities.robot;
 
 import custom_shortcuts.database.SqlControllerException;
+import javafx.scene.image.Image;
+
+import java.io.File;
 
 import static custom_shortcuts.gui.main_window.CustomShortcuts.getSqlController;
+import static custom_shortcuts.gui.main_window.CustomShortcuts.getDataFolder;
 
 public class ShortcutRobotInput {
 
 	private final double[] mousePosition;
 	private final String body;
+	private final boolean includesPicture;
+	private final Image picture;
 
 	public ShortcutRobotInput(String rawInput) throws SqlControllerException {
 		this.mousePosition = retrieveMousePosition();
-		this.body = createBody(rawInput);
+		String name = getShortcutName(rawInput);
+		String[] shortcut = getSqlController().getShortcut(name);
+		this.body = createBody(rawInput, shortcut);
+		this.includesPicture = shortcut[3].equals("true");
+		if (this.includesPicture) {
+			this.picture = new Image("file:" + new File(getDataFolder().getPathToPicture(shortcut[4]).toString()));
+		} else {
+			this.picture = null;
+		}
 	}
 
 	public double[] getMousePosition() {
@@ -22,7 +36,15 @@ public class ShortcutRobotInput {
 		return this.body;
 	}
 
-	private String createBody(String rawInput) throws SqlControllerException {
+	public boolean doesIncludePicture() {
+		return this.includesPicture;
+	}
+
+	public Image getPicture() {
+		return this.picture;
+	}
+
+	private String createBody(String rawInput, String[] shortcut) {
 		int indexOfFirstSpace = rawInput.indexOf(' ');
 		String[] inputParameters;
 		if (indexOfFirstSpace != -1 && indexOfFirstSpace + 1 < rawInput.length()) {
@@ -31,9 +53,6 @@ public class ShortcutRobotInput {
 		} else {
 			inputParameters = new String[0];
 		}
-
-		String shortcutName = rawInput.split(" ")[0];
-		String[] shortcut = getSqlController().getShortcut(shortcutName);
 
 		String[] parameters;
 		if (!shortcut[1].equals("")) {
@@ -48,6 +67,10 @@ public class ShortcutRobotInput {
 		}
 
 		return body;
+	}
+
+	private String getShortcutName(String rawInput) {
+		return rawInput.split(" ")[0];
 	}
 
 	private double[] retrieveMousePosition() throws SqlControllerException {

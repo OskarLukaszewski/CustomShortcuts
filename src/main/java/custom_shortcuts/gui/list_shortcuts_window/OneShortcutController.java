@@ -1,8 +1,8 @@
 package custom_shortcuts.gui.list_shortcuts_window;
 
 import custom_shortcuts.database.DataFolderException;
-import custom_shortcuts.database.SqlController;
 import custom_shortcuts.database.SqlControllerException;
+import custom_shortcuts.database.TemporaryPicture;
 import custom_shortcuts.functionalities.autocompletion.CollectionOfAutoCompletions;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -10,37 +10,49 @@ import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import java.io.File;
+import java.nio.file.Path;
 import java.util.Optional;
 import static custom_shortcuts.gui.main_window.CustomShortcuts.getIcon;
+import static custom_shortcuts.gui.main_window.CustomShortcuts.getDataFolder;
+import static custom_shortcuts.gui.main_window.CustomShortcuts.getSqlController;
 
 public class OneShortcutController {
 
-	private boolean isEditOn, isDragOn, movedToTop;
+	private boolean isEditOn, isDragOn, movedToTop, includesPicture;
 	private String[] shortcut;
 	private double yOffSet;
 	private double initialHeight;
 	private final int id;
-	private final SqlController sqlController;
+	private int minHeight;
 	private ListShortcutsController listShortcutsController;
 
 	@FXML
-	private BorderPane mainBorderPane;
+	private BorderPane mainBorderPane, pictureBorderPane;
 
 	@FXML
-	private TextField nameTextField, parametersTextField;
+	private GridPane bottomGridPane;
+
+	@FXML
+	private Button changePictureButton, showPictureButton;
+
+	@FXML
+	private TextField nameTextField, parametersTextField, picturePathTextField;
 
 	@FXML
 	private TextArea bodyTextArea;
 
 	@FXML
-	private Button topButton, bottomButton;
+	private ToggleButton pictureToggleButton;
 
 	@FXML
-	private FontAwesomeIconView topIcon, bottomIcon;
+	private FontAwesomeIconView topIcon, bottomIcon, pictureFirstIcon;
 
 	@FXML
 	private Pane separator;
@@ -54,11 +66,15 @@ public class OneShortcutController {
 		setOnFocus(this.parametersTextField);
 		setOnFocus(this.bodyTextArea);
 		setSeparatorMouseFunction();
+		setIncludesPicture(this.shortcut[3].equals("true"));
+		GridPane.setRowIndex(this.pictureBorderPane, 0);
+		this.pictureToggleButton.selectedProperty()
+				.addListener((observableValue, aBoolean, t1) -> setPictureToggle(t1));
+		this.pictureToggleButton.setSelected(false);
 	}
 
 	public OneShortcutController(
-			SqlController sqlController, String[] shortcut, int id) {
-		this.sqlController = sqlController;
+			String[] shortcut, int id) {
 		this.isEditOn = false;
 		this.isDragOn = false;
 		this.shortcut = shortcut;
@@ -100,19 +116,15 @@ public class OneShortcutController {
 				setEditable(false);
 				return;
 			}
-			Alert question = new Alert(Alert.AlertType.CONFIRMATION);
-			question.setHeaderText("Confirmation");
-			question.setContentText("Are you sure you want to save changes to shortcut '" + this.shortcut[0] + "'?");
-			Stage stage = (Stage) question.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(getIcon());
-			Optional<ButtonType> option = question.showAndWait();
-			if (option.isPresent() && ButtonType.OK.equals(option.get())) {
+			boolean confirmed = askForConfirmation(
+					"Are you sure you want to save changes to shortcut '" + this.shortcut[0] + "'?");
+			if (confirmed) {
 				String[] newShortcut = new String[] {
 						this.nameTextField.getText(),
 						this.parametersTextField.getText(),
 						this.bodyTextArea.getText()};
 				try {
-					this.sqlController.updateShortcut(this.shortcut[0], newShortcut);
+					getSqlController().updateShortcut(this.shortcut[0], newShortcut);
 					CollectionOfAutoCompletions.resetAutoCompletions();
 					this.shortcut = newShortcut;
 				} catch (SqlControllerException e) {
@@ -130,34 +142,26 @@ public class OneShortcutController {
 		}
 	}
 
-	public void bottomButtonClick() {
+	public void middleButtonClick() {
 		if (this.isEditOn) {
 			if (isSame()) {
 				setEditable(false);
 				return;
 			}
-			Alert question = new Alert(Alert.AlertType.CONFIRMATION);
-			question.setHeaderText("Confirmation");
-			question.setContentText("Are you sure you want to discard changes to shortcut '" + this.shortcut[0] + "'?");
-			Stage stage = (Stage) question.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(getIcon());
-			Optional<ButtonType> option = question.showAndWait();
-			if (option.isPresent() && ButtonType.OK.equals(option.get())) {
+			boolean confirmed = askForConfirmation(
+					"Are you sure you want to discard changes to shortcut '" + this.shortcut[0] + "'?");
+			if (confirmed) {
 				this.nameTextField.setText(this.shortcut[0]);
 				this.parametersTextField.setText(this.shortcut[1]);
 				this.bodyTextArea.setText(this.shortcut[2]);
 				setEditable(false);
 			}
 		} else {
-			Alert question = new Alert(Alert.AlertType.CONFIRMATION);
-			question.setHeaderText("Confirmation");
-			question.setContentText("Are you sure you want to remove shortcut '" + this.shortcut[0] + "'?");
-			Stage stage = (Stage) question.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(getIcon());
-			Optional<ButtonType> option = question.showAndWait();
-			if (option.isPresent() && ButtonType.OK.equals(option.get())) {
+			boolean confirmed = askForConfirmation(
+					"Are you sure you want to remove shortcut '" + this.shortcut[0] + "'?");
+			if (confirmed) {
 				try {
-					this.sqlController.deleteShortcut(this.shortcut[0]);
+					getSqlController().deleteShortcut(this.shortcut[0]);
 					CollectionOfAutoCompletions.resetAutoCompletions();
 					if (this.isMovedToTop()) {
 						this.listShortcutsController.removeRowAtIndex(1);
@@ -187,6 +191,94 @@ public class OneShortcutController {
 				}
 			}
 		}
+	}
+
+	public void firstPictureButtonClick() {
+		if (!this.includesPicture) {
+			boolean confirmed = askForConfirmation(
+					"Are you sure you want to add a picture to shortcut '" + this.shortcut[0] + "'?");
+			if (confirmed) {
+				FileChooser fileChooser = new FileChooser();
+				fileChooser.setTitle("Select a picture");
+				fileChooser.getExtensionFilters().addAll(
+						new FileChooser.ExtensionFilter("IMAGE FILES", "*.jpg", "*.png"),
+						new FileChooser.ExtensionFilter("ALL FILES", "*.*")
+				);
+				File file = fileChooser.showOpenDialog(this.mainBorderPane.getScene().getWindow());
+				if (file != null) {
+					try {
+						TemporaryPicture temporaryPicture = getDataFolder()
+								.createTemporaryPicture(file.getPath(), this.shortcut[0]);
+						if (temporaryPicture.permanentlyAddPicture()) {
+							getSqlController().addPictureToShortcut(this.shortcut[0], temporaryPicture.getCurrentName());
+						}
+						this.shortcut[3] = "true";
+						this.shortcut[4] = temporaryPicture.getCurrentName();
+						setIncludesPicture(true);
+					} catch (DataFolderException | SqlControllerException e) {
+						Alert alert = new Alert(Alert.AlertType.ERROR);
+						alert.setHeaderText("Operation failed");
+						alert.setContentText(e.getMessage());
+						Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+						stage.getIcons().add(getIcon());
+						alert.showAndWait();
+					}
+				}
+			}
+		} else {
+			boolean confirmed = askForConfirmation(
+					"Are you sure you want to delete the picture from shortcut '" + this.shortcut[0] + "'?");
+			if (confirmed) {
+				try {
+					getDataFolder().deletePicture(this.shortcut[4]);
+					getSqlController().removePictureFromShortcut(this.shortcut[0]);
+					this.shortcut[3] = "false";
+					this.shortcut[4] = null;
+					setIncludesPicture(false);
+				} catch (SqlControllerException | DataFolderException e) {
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setHeaderText("Operation failed");
+					alert.setContentText(e.getMessage());
+					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+					stage.getIcons().add(getIcon());
+					alert.showAndWait();
+				}
+			}
+		}
+	}
+
+	public void changePictureButtonClick() {
+		boolean confirmed = askForConfirmation(
+				"Are you sure you want to change the picture in shortcut '" + this.shortcut[0] + "'?");
+		if (confirmed) {
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.setTitle("Select a picture");
+			fileChooser.getExtensionFilters().addAll(
+					new FileChooser.ExtensionFilter("IMAGE FILES", "*.jpg", "*.png"),
+					new FileChooser.ExtensionFilter("ALL FILES", "*.*")
+			);
+			File file = fileChooser.showOpenDialog(this.mainBorderPane.getScene().getWindow());
+			if (file != null) {
+				try {
+					String newName = getDataFolder().changePicture(file.getPath(), this.shortcut[4]);
+					getSqlController().changePictureInShortcut(this.shortcut[0], newName);
+					this.shortcut[4] = newName;
+					this.picturePathTextField.setText(getPathFromName(newName));
+				} catch (SqlControllerException | DataFolderException e) {
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setHeaderText("Operation failed");
+					alert.setContentText(e.getMessage());
+					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+					stage.getIcons().add(getIcon());
+					alert.showAndWait();
+				}
+			}
+		}
+	}
+
+	public void showPictureButtonClick() {
+		Image picture = new Image("file:" + getDataFolder().getPathToPicture(this.shortcut[4]).toString());
+		this.listShortcutsController.showPicture(picture);
 	}
 
 	private void setEditable(boolean editable) {
@@ -230,7 +322,7 @@ public class OneShortcutController {
 		});
 		this.separator.setOnMouseDragged(mouseEvent -> {
 			double newHeight = this.initialHeight + mouseEvent.getScreenY() - this.yOffSet;
-			this.mainBorderPane.setMinHeight(Math.max(newHeight, 90));
+			this.mainBorderPane.setMinHeight(Math.max(newHeight, this.minHeight));
 		});
 		this.separator.setOnMouseReleased(mouseEvent -> {
 			double mousePosition = mouseEvent.getSceneY();
@@ -252,5 +344,51 @@ public class OneShortcutController {
 				this.separator.getScene().setCursor(Cursor.DEFAULT);
 			}
 		});
+	}
+
+	private void setIncludesPicture(boolean includesPicture) {
+		this.includesPicture = includesPicture;
+		if (includesPicture) {
+			this.picturePathTextField.setText(getPathFromName(this.shortcut[4]));
+			this.pictureFirstIcon.setIcon(FontAwesomeIcon.TRASH_ALT);
+			this.changePictureButton.setDisable(false);
+			this.showPictureButton.setDisable(false);
+		} else {
+			this.picturePathTextField.setText("");
+			this.pictureFirstIcon.setIcon(FontAwesomeIcon.PLUS_CIRCLE);
+			this.changePictureButton.setDisable(true);
+			this.showPictureButton.setDisable(true);
+		}
+	}
+
+	private String getPathFromName(String name) {
+		Path path = getDataFolder().getPathToPicture(name);
+		if (path != null) {
+			return path.toString();
+		} else {
+			return "File Not Found";
+		}
+	}
+
+	private void setPictureToggle(boolean pictureElementToggled) {
+		if (pictureElementToggled) {
+			this.bottomGridPane.getChildren().add(this.pictureBorderPane);
+			this.minHeight = 125;
+			this.mainBorderPane.setMinHeight(this.mainBorderPane.getMinHeight() + 35);
+		} else {
+			this.bottomGridPane.getChildren().removeIf(node -> GridPane.getRowIndex(node) == 0);
+			this.minHeight = 90;
+			this.mainBorderPane.setMinHeight(this.mainBorderPane.getMinHeight() - 35);
+		}
+	}
+
+	private boolean askForConfirmation(String question) {
+		Alert questionAlert = new Alert(Alert.AlertType.CONFIRMATION);
+		questionAlert.setHeaderText("Confirmation");
+		questionAlert.setContentText(question);
+		Stage stage = (Stage) questionAlert.getDialogPane().getScene().getWindow();
+		stage.getIcons().add(getIcon());
+		Optional<ButtonType> option = questionAlert.showAndWait();
+		return option.filter(ButtonType.OK::equals).isPresent();
 	}
 }

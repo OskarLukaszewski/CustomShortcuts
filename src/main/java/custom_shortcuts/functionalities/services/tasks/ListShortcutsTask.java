@@ -8,7 +8,6 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -28,7 +27,7 @@ public class ListShortcutsTask extends Task<ListShortcutsTaskOutput> {
 		for (int i=0; i<shortcuts.size(); i++) {
 			FXMLLoader loaderRow = new FXMLLoader(ListShortcutsWindow.class.getResource("OneShortcut.fxml"));
 			OneShortcutController oneShortcutController = new OneShortcutController(
-					getSqlController(), shortcuts.get(i), i+2);
+					shortcuts.get(i), i+2);
 			controllers.add(oneShortcutController);
 			loaderRow.setController(oneShortcutController);
 			BorderPane newRow = loaderRow.load();

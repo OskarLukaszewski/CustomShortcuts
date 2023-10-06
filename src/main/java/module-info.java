@@ -16,4 +16,6 @@ module custom_shortcuts {
 	exports custom_shortcuts.gui.screenshot_window;
 	opens custom_shortcuts.gui.screenshot_window to javafx.fxml;
 	exports custom_shortcuts.database;
+	exports custom_shortcuts.gui.show_picture_window;
+	opens custom_shortcuts.gui.show_picture_window to javafx.fxml;
 }
