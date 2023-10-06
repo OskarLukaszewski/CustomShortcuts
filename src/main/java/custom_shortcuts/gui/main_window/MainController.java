@@ -12,18 +12,16 @@ import custom_shortcuts.functionalities.services.MoveRectangleHoldClockService;
 import custom_shortcuts.gui.add_shortcut_window.AddShortcutWindow;
 import custom_shortcuts.gui.list_shortcuts_window.ListShortcutsWindow;
 import custom_shortcuts.gui.screenshot_window.ScreenshotWindow;
+import custom_shortcuts.utils.Alerts;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import de.jensd.fx.glyphs.fontawesome.utils.FontAwesomeIconFactory;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import static custom_shortcuts.gui.main_window.CustomShortcuts.getIcon;
 
 public class MainController {
 
@@ -131,27 +129,7 @@ public class MainController {
 			this.shortcutRobot.enterShortcut(shortcutRobotInput);
 			this.shortcutTextField.setText("");
 		} catch (SqlControllerException e) {
-			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-			errorAlert.setHeaderText("Database error");
-			errorAlert.setContentText("Couldn't construct message from database.");
-			Stage stage = (Stage) errorAlert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(getIcon());
-			errorAlert.showAndWait();
-		}
-	}
-
-	public void enterShortcut(String rawInput) {
-		try {
-			ShortcutRobotInput shortcutRobotInput = new ShortcutRobotInput(rawInput);
-			this.shortcutRobot.enterShortcut(shortcutRobotInput);
-			this.shortcutTextField.setText("");
-		} catch (SqlControllerException e) {
-			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-			errorAlert.setHeaderText("Database error");
-			errorAlert.setContentText("Couldn't construct message from database.");
-			Stage stage = (Stage) errorAlert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(getIcon());
-			errorAlert.showAndWait();
+			Alerts.showErrorAlert("Database error", "Couldn't construct message from database.");
 		}
 	}
 

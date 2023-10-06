@@ -1,8 +1,8 @@
 package custom_shortcuts.gui.show_picture_window;
 
+import custom_shortcuts.utils.Alerts;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -46,12 +46,7 @@ public class ShowPictureWindow {
 			this.isOpened = true;
 		} catch (IOException e) {
 			this.isOpened = false;
-			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-			errorAlert.setHeaderText("Window cannot be opened");
-			errorAlert.setContentText(e.getMessage());
-			Stage stage = (Stage) errorAlert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(getIcon());
-			errorAlert.showAndWait();
+			Alerts.showErrorAlert("Window cannot be opened", e.getMessage());
 		}
 	}
 }

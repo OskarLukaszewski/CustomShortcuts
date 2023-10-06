@@ -1,11 +1,10 @@
 package custom_shortcuts.gui.list_shortcuts_window;
 
+import custom_shortcuts.utils.Alerts;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.util.List;
 import static custom_shortcuts.gui.main_window.CustomShortcuts.getIcon;
@@ -65,12 +64,7 @@ public class ListShortcutsWindow {
 			this.isOpened = true;
 		} catch (IOException e) {
 			this.isOpened = false;
-			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-			errorAlert.setHeaderText("Window cannot be opened");
-			errorAlert.setContentText(e.getMessage());
-			Stage stage = (Stage) errorAlert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(getIcon());
-			errorAlert.showAndWait();
+			Alerts.showErrorAlert("Window cannot be opened", e.getMessage());
 		}
 	}
 

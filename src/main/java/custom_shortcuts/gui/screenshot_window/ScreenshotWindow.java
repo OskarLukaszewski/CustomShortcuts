@@ -1,10 +1,9 @@
 package custom_shortcuts.gui.screenshot_window;
 
-import custom_shortcuts.database.SqlController;
+import custom_shortcuts.utils.Alerts;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Screen;
@@ -66,12 +65,7 @@ public class ScreenshotWindow {
 		} catch (IOException e) {
 			this.mainStage.show();
 			this.isOpened = false;
-			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-			errorAlert.setHeaderText("Window cannot be opened");
-			errorAlert.setContentText(e.getMessage());
-			Stage stage = (Stage) errorAlert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(getIcon());
-			errorAlert.showAndWait();
+			Alerts.showErrorAlert("Window cannot be opened", e.getMessage());
 		}
 	}
 

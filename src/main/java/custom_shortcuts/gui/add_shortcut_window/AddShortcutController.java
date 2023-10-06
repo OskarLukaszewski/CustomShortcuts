@@ -4,15 +4,16 @@ import custom_shortcuts.database.DataFolderException;
 import custom_shortcuts.database.SqlControllerException;
 import custom_shortcuts.database.TemporaryPicture;
 import custom_shortcuts.functionalities.autocompletion.CollectionOfAutoCompletions;
+import custom_shortcuts.utils.Alerts;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import java.io.File;
-import java.sql.SQLException;
-
 import static custom_shortcuts.gui.main_window.CustomShortcuts.getDataFolder;
-import static custom_shortcuts.gui.main_window.CustomShortcuts.getIcon;
 import static custom_shortcuts.gui.main_window.CustomShortcuts.getSqlController;
 
 public class AddShortcutController {
@@ -78,7 +79,7 @@ public class AddShortcutController {
 					if (!temporaryPicture.delete()) {
 						temporaryPicture.deleteOnExit();
 					}
-					showAlert("Incorrect file path",
+					Alerts.showInformationAlert("Incorrect file path",
 							"The shortcut has been created, but no picture has been added.");
 					return;
 				}
@@ -95,7 +96,7 @@ public class AddShortcutController {
 					throw new RuntimeException(ex);
 				}
 			}
-			showAlert("Incorrect input", e.getMessage());
+			Alerts.showInformationAlert("Incorrect input", e.getMessage());
 			return;
 		}
 		hideAndReset();
@@ -119,14 +120,5 @@ public class AddShortcutController {
 		this.filePathTextField.setDisable(!includePicture);
 		this.filePathTextField.setEditable(includePicture);
 		this.filePathButton.setDisable(!includePicture);
-	}
-
-	private void showAlert(String header, String body) {
-		Alert alert = new Alert(Alert.AlertType.INFORMATION);
-		alert.setHeaderText(header);
-		alert.setContentText(body);
-		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-		stage.getIcons().add(getIcon());
-		alert.showAndWait();
 	}
 }

@@ -1,16 +1,14 @@
 package custom_shortcuts.gui.screenshot_window;
 
 import custom_shortcuts.database.SqlControllerException;
+import custom_shortcuts.utils.Alerts;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.robot.Robot;
 import javafx.stage.Screen;
-import javafx.stage.Stage;
-import static custom_shortcuts.gui.main_window.CustomShortcuts.getIcon;
 import static custom_shortcuts.gui.main_window.CustomShortcuts.getSqlController;
 
 public class ScreenshotController {
@@ -51,12 +49,7 @@ public class ScreenshotController {
 			getSqlController().updateMousePosition(mousePosition);
 			return true;
 		} catch (SqlControllerException e) {
-			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-			errorAlert.setHeaderText("Error during updating mouse position");
-			errorAlert.setContentText(e.getMessage());
-			Stage stage = (Stage) errorAlert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(getIcon());
-			errorAlert.showAndWait();
+			Alerts.showErrorAlert("Error during updating mouse position", e.getMessage());
 			return false;
 		}
 	}

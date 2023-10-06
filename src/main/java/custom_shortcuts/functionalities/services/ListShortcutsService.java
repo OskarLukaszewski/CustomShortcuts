@@ -4,12 +4,11 @@ import custom_shortcuts.functionalities.services.tasks.ListShortcutsTask;
 import custom_shortcuts.gui.list_shortcuts_window.ListShortcutsController;
 import custom_shortcuts.gui.list_shortcuts_window.ListShortcutsWindow;
 import custom_shortcuts.gui.list_shortcuts_window.OneShortcutController;
+import custom_shortcuts.utils.Alerts;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.scene.Cursor;
-import javafx.scene.control.Alert;
 import javafx.stage.Stage;
-import static custom_shortcuts.gui.main_window.CustomShortcuts.getIcon;
 import static custom_shortcuts.gui.main_window.CustomShortcuts.getMainStage;
 
 public class ListShortcutsService extends Service<ListShortcutsTaskOutput> {
@@ -34,12 +33,7 @@ public class ListShortcutsService extends Service<ListShortcutsTaskOutput> {
 
 		setOnFailed(workerStateEvent -> {
 			this.mainStage.getScene().setCursor(Cursor.DEFAULT);
-			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-			errorAlert.setHeaderText("Window cannot be opened");
-			errorAlert.setContentText(getMessage());
-			Stage stage = (Stage) errorAlert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(getIcon());
-			errorAlert.showAndWait();
+			Alerts.showErrorAlert("Window cannot be opened", getMessage());
 		});
 
 		setOnCancelled(workerStateEvent -> this.mainStage.getScene().setCursor(Cursor.DEFAULT));

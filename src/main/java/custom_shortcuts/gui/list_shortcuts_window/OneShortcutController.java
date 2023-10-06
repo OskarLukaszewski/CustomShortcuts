@@ -4,6 +4,7 @@ import custom_shortcuts.database.DataFolderException;
 import custom_shortcuts.database.SqlControllerException;
 import custom_shortcuts.database.TemporaryPicture;
 import custom_shortcuts.functionalities.autocompletion.CollectionOfAutoCompletions;
+import custom_shortcuts.utils.Alerts;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.fxml.FXML;
@@ -15,11 +16,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import java.io.File;
 import java.nio.file.Path;
-import java.util.Optional;
-import static custom_shortcuts.gui.main_window.CustomShortcuts.getIcon;
 import static custom_shortcuts.gui.main_window.CustomShortcuts.getDataFolder;
 import static custom_shortcuts.gui.main_window.CustomShortcuts.getSqlController;
 
@@ -116,7 +114,7 @@ public class OneShortcutController {
 				setEditable(false);
 				return;
 			}
-			boolean confirmed = askForConfirmation(
+			boolean confirmed = Alerts.showConfirmationAlert("Confirmation",
 					"Are you sure you want to save changes to shortcut '" + this.shortcut[0] + "'?");
 			if (confirmed) {
 				String[] newShortcut = new String[] {
@@ -128,12 +126,7 @@ public class OneShortcutController {
 					CollectionOfAutoCompletions.resetAutoCompletions();
 					this.shortcut = newShortcut;
 				} catch (SqlControllerException e) {
-					Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-					errorAlert.setHeaderText("Operation failed");
-					errorAlert.setContentText(e.getMessage());
-					Stage stage2 = (Stage) errorAlert.getDialogPane().getScene().getWindow();
-					stage2.getIcons().add(getIcon());
-					errorAlert.showAndWait();
+					Alerts.showErrorAlert("Operation failed", e.getMessage());
 				}
 				setEditable(false);
 			}
@@ -148,7 +141,7 @@ public class OneShortcutController {
 				setEditable(false);
 				return;
 			}
-			boolean confirmed = askForConfirmation(
+			boolean confirmed = Alerts.showConfirmationAlert("Confirmation",
 					"Are you sure you want to discard changes to shortcut '" + this.shortcut[0] + "'?");
 			if (confirmed) {
 				this.nameTextField.setText(this.shortcut[0]);
@@ -157,7 +150,7 @@ public class OneShortcutController {
 				setEditable(false);
 			}
 		} else {
-			boolean confirmed = askForConfirmation(
+			boolean confirmed = Alerts.showConfirmationAlert("Confirmation",
 					"Are you sure you want to remove shortcut '" + this.shortcut[0] + "'?");
 			if (confirmed) {
 				try {
@@ -169,19 +162,9 @@ public class OneShortcutController {
 						this.listShortcutsController.removeRowAtIndex(this.id);
 					}
 				} catch (SqlControllerException e) {
-					Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-					errorAlert.setHeaderText("Operation failed");
-					errorAlert.setContentText(e.getMessage());
-					Stage stage2 = (Stage) errorAlert.getDialogPane().getScene().getWindow();
-					stage2.getIcons().add(getIcon());
-					errorAlert.showAndWait();
+					Alerts.showErrorAlert("Operation failed", e.getMessage());
 				} catch (DataFolderException e) {
-					Alert errorAlert = new Alert(Alert.AlertType.INFORMATION);
-					errorAlert.setHeaderText("Operation failed");
-					errorAlert.setContentText(e.getMessage());
-					Stage stage2 = (Stage) errorAlert.getDialogPane().getScene().getWindow();
-					stage2.getIcons().add(getIcon());
-					errorAlert.showAndWait();
+					Alerts.showInformationAlert("Operation failed", e.getMessage());
 					CollectionOfAutoCompletions.resetAutoCompletions();
 					if (this.isMovedToTop()) {
 						this.listShortcutsController.removeRowAtIndex(1);
@@ -195,7 +178,7 @@ public class OneShortcutController {
 
 	public void firstPictureButtonClick() {
 		if (!this.includesPicture) {
-			boolean confirmed = askForConfirmation(
+			boolean confirmed = Alerts.showConfirmationAlert("Confirmation",
 					"Are you sure you want to add a picture to shortcut '" + this.shortcut[0] + "'?");
 			if (confirmed) {
 				FileChooser fileChooser = new FileChooser();
@@ -216,17 +199,12 @@ public class OneShortcutController {
 						this.shortcut[4] = temporaryPicture.getCurrentName();
 						setIncludesPicture(true);
 					} catch (DataFolderException | SqlControllerException e) {
-						Alert alert = new Alert(Alert.AlertType.ERROR);
-						alert.setHeaderText("Operation failed");
-						alert.setContentText(e.getMessage());
-						Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-						stage.getIcons().add(getIcon());
-						alert.showAndWait();
+						Alerts.showErrorAlert("Operation failed", e.getMessage());
 					}
 				}
 			}
 		} else {
-			boolean confirmed = askForConfirmation(
+			boolean confirmed = Alerts.showConfirmationAlert("Confirmation",
 					"Are you sure you want to delete the picture from shortcut '" + this.shortcut[0] + "'?");
 			if (confirmed) {
 				try {
@@ -236,19 +214,14 @@ public class OneShortcutController {
 					this.shortcut[4] = null;
 					setIncludesPicture(false);
 				} catch (SqlControllerException | DataFolderException e) {
-					Alert alert = new Alert(Alert.AlertType.ERROR);
-					alert.setHeaderText("Operation failed");
-					alert.setContentText(e.getMessage());
-					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-					stage.getIcons().add(getIcon());
-					alert.showAndWait();
+					Alerts.showErrorAlert("Operation failed", e.getMessage());
 				}
 			}
 		}
 	}
 
 	public void changePictureButtonClick() {
-		boolean confirmed = askForConfirmation(
+		boolean confirmed = Alerts.showConfirmationAlert("Confirmation",
 				"Are you sure you want to change the picture in shortcut '" + this.shortcut[0] + "'?");
 		if (confirmed) {
 			FileChooser fileChooser = new FileChooser();
@@ -265,12 +238,7 @@ public class OneShortcutController {
 					this.shortcut[4] = newName;
 					this.picturePathTextField.setText(getPathFromName(newName));
 				} catch (SqlControllerException | DataFolderException e) {
-					Alert alert = new Alert(Alert.AlertType.ERROR);
-					alert.setHeaderText("Operation failed");
-					alert.setContentText(e.getMessage());
-					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-					stage.getIcons().add(getIcon());
-					alert.showAndWait();
+					Alerts.showErrorAlert("Operation failed", e.getMessage());
 				}
 			}
 		}
@@ -380,15 +348,5 @@ public class OneShortcutController {
 			this.minHeight = 90;
 			this.mainBorderPane.setMinHeight(this.mainBorderPane.getMinHeight() - 35);
 		}
-	}
-
-	private boolean askForConfirmation(String question) {
-		Alert questionAlert = new Alert(Alert.AlertType.CONFIRMATION);
-		questionAlert.setHeaderText("Confirmation");
-		questionAlert.setContentText(question);
-		Stage stage = (Stage) questionAlert.getDialogPane().getScene().getWindow();
-		stage.getIcons().add(getIcon());
-		Optional<ButtonType> option = questionAlert.showAndWait();
-		return option.filter(ButtonType.OK::equals).isPresent();
 	}
 }
