@@ -1,6 +1,9 @@
 package custom_shortcuts.gui.list_shortcuts_window;
 
+import custom_shortcuts.functionalities.services.ResizeListOfShortcutsClockService;
 import custom_shortcuts.gui.show_picture_window.ShowPictureWindow;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ScrollPane;
@@ -14,7 +17,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -25,7 +27,8 @@ public class ListShortcutsController {
 	private List<OneShortcutController> subControllers;
 	private SearchTabController searchTabController;
 	private List<BorderPane> newRows;
-	private ShowPictureWindow showPictureWindow;
+	private final ShowPictureWindow showPictureWindow;
+	private final ResizeListOfShortcutsClockService resizeListOfShortcutsClockService;
 
 	@FXML
 	private ScrollPane scrollPane;
@@ -43,6 +46,7 @@ public class ListShortcutsController {
 				this.searchTabController.requestFocus();
 			}
 		});
+		this.scrollPane.widthProperty().addListener((observableValue, number, t1) -> resizeLater((Double) t1));
 	}
 
 	public ListShortcutsController() {
@@ -52,6 +56,18 @@ public class ListShortcutsController {
 		columnConstraints.setHgrow(Priority.ALWAYS);
 		this.gridPane.getColumnConstraints().add(columnConstraints);
 		this.showPictureWindow = new ShowPictureWindow();
+		this.resizeListOfShortcutsClockService = new ResizeListOfShortcutsClockService(this);
+	}
+
+	private void resizeLater(double targetWidth) {
+		this.resizeListOfShortcutsClockService.startService(targetWidth-14);
+	}
+
+	public void resizeNow(double targetWidth) {
+		for (BorderPane borderPane: this.newRows) {
+			borderPane.setMaxWidth(targetWidth);
+			borderPane.setMinWidth(targetWidth);
+		}
 	}
 
 	public void showPicture(Image picture) {

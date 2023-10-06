@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane fx:id="mainBorderPane" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="125.0" minWidth="600.0" prefHeight="90.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="mainBorderPane" maxWidth="630.0" minHeight="125.0" minWidth="600.0" prefHeight="90.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <right>
       <FlowPane maxWidth="20.0" minWidth="20.0" BorderPane.alignment="CENTER">
          <children>
