@@ -51,10 +51,6 @@ public class ShortcutRobot {
 		this.robot.keyRelease(KeyCode.CONTROL);
 	}
 
-	private void enter() {
-		this.robot.keyPress(KeyCode.ENTER);
-	}
-
 	private void returnMouse(double positionX, double positionY) {
 		this.robot.mouseMove(positionX, positionY);
 	}
