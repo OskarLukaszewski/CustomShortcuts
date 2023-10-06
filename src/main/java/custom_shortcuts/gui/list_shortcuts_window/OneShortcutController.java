@@ -60,9 +60,10 @@ public class OneShortcutController {
 		this.nameTextField.setText(this.shortcut[0]);
 		this.parametersTextField.setText(this.shortcut[1]);
 		this.bodyTextArea.setText(this.shortcut[2]);
-		setOnFocus(this.nameTextField);
-		setOnFocus(this.parametersTextField);
-		setOnFocus(this.bodyTextArea);
+		setOnFocusText(this.nameTextField);
+		setOnFocusText(this.parametersTextField);
+		setOnFocusText(this.bodyTextArea);
+		setOnFocusPicture(this.picturePathTextField);
 		setSeparatorMouseFunction();
 		setIncludesPicture(this.shortcut[3].equals("true"));
 		GridPane.setRowIndex(this.pictureBorderPane, 0);
@@ -276,9 +277,17 @@ public class OneShortcutController {
 		return this.bodyTextArea.getText().equals(this.shortcut[2]);
 	}
 
-	private void setOnFocus(Node node) {
+	private void setOnFocusText(Node node) {
 		node.focusedProperty().addListener((observableValue, oldValue, newValue) -> {
 			if (newValue && !this.isEditOn) {
+				this.listShortcutsController.setFocus();
+			}
+		});
+	}
+
+	private void setOnFocusPicture(Node node) {
+		node.focusedProperty().addListener((observableValue, aBoolean, t1) -> {
+			if (t1 && !this.includesPicture) {
 				this.listShortcutsController.setFocus();
 			}
 		});
