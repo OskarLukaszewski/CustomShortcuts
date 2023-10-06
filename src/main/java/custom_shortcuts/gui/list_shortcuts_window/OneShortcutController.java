@@ -120,7 +120,10 @@ public class OneShortcutController {
 				String[] newShortcut = new String[] {
 						this.nameTextField.getText(),
 						this.parametersTextField.getText(),
-						this.bodyTextArea.getText()};
+						this.bodyTextArea.getText(),
+						this.shortcut[3],
+						this.shortcut[4]
+				};
 				try {
 					getSqlController().updateShortcut(this.shortcut[0], newShortcut);
 					CollectionOfAutoCompletions.resetAutoCompletions();
