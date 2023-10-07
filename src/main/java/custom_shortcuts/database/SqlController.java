@@ -207,6 +207,9 @@ public class SqlController {
 		} catch (SQLException e) {
 			throw new SqlControllerException("Couldn't retrieve the shortcut from the database.");
 		}
+		if (result[0] == null) {
+			throw new SqlControllerException("Couldn't retrieve the shortcut from the database.");
+		}
 		return result;
 	}
 
