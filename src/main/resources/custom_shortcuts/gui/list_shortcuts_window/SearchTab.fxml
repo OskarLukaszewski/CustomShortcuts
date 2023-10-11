@@ -7,19 +7,19 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
 
-<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="600.0" prefHeight="26.0" style="-fx-border-width: 0 0 1 0; -fx-border-color: gray;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="600.0" prefHeight="31.0" style="-fx-border-width: 0 0 1 0; -fx-border-color: gray;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <TextField fx:id="textField" onAction="#textFieldEnter" prefHeight="25.0" promptText="Name" style="-fx-background-radius: 0;" BorderPane.alignment="CENTER">
+      <TextField fx:id="textField" onAction="#textFieldEnter" prefHeight="30.0" promptText="Name" style="-fx-background-radius: 0;" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets bottom="1.0" />
          </BorderPane.margin></TextField>
    </center>
    <right>
-      <StackPane prefHeight="25.0" prefWidth="25.0" BorderPane.alignment="CENTER">
+      <StackPane prefHeight="25.0" prefWidth="30.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="button" maxHeight="17.0" maxWidth="17.0" minHeight="17.0" minWidth="17.0" mnemonicParsing="false" onAction="#buttonPress" style="-fx-background-radius: 0;">
+            <Button fx:id="button" maxHeight="20.0" maxWidth="20.0" minHeight="20.0" minWidth="20.0" mnemonicParsing="false" onAction="#buttonPress">
                <graphic>
-                  <FontAwesomeIconView glyphName="CLOSE" scaleX="0.9" scaleY="0.9" />
+                  <FontAwesomeIconView glyphName="CLOSE" scaleX="1.1" scaleY="1.1" />
                </graphic>
             </Button>
          </children>
