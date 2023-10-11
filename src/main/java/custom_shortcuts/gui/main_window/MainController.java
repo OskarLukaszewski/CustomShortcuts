@@ -17,7 +17,9 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
@@ -115,8 +117,12 @@ public class MainController {
 		this.hideShowAnimation.setFullyDraggable(fullyDraggable);
 		if (fullyDraggable) {
 			this.moveRectangleIcon.setIcon(FontAwesomeIcon.ARROWS);
+			this.moveRectangleIcon.setScaleX(0.89);
+			StackPane.setMargin(this.moveRectangleIcon, new Insets(0, 1, 0, 0));
 		} else {
 			this.moveRectangleIcon.setIcon(FontAwesomeIcon.ARROWS_V);
+			this.moveRectangleIcon.setScaleX(0.97);
+			StackPane.setMargin(this.moveRectangleIcon, new Insets(0));
 			this.movedAwayFromEdge = false;
 			this.mainStage.setX(Screen.getPrimary().getBounds().getWidth() - this.mainStage.getWidth());
 		}

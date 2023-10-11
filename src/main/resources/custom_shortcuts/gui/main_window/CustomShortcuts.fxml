@@ -99,23 +99,19 @@
             </FlowPane>
          </children>
       </GridPane>
-      <StackPane prefHeight="150.0" prefWidth="200.0">
+      <StackPane alignment="BOTTOM_LEFT" prefHeight="150.0" prefWidth="200.0">
          <children>
             <Button fx:id="hideButton" maxWidth="63.0" minHeight="75.0" mnemonicParsing="false" onAction="#hideButtonClick" prefHeight="84.0" prefWidth="30.0" style="-fx-background-radius: 0;">
                <graphic>
                   <FontAwesomeIconView fx:id="hideIcon" glyphName="LONG_ARROW_RIGHT" scaleX="1.5" scaleY="3.0" wrappingWidth="12.0" />
                </graphic>
             </Button>
-            <Rectangle fx:id="moveRectangle" fill="#dddddd" height="15.0" stroke="BLACK" strokeType="INSIDE" width="15.0">
-               <StackPane.margin>
-                  <Insets right="15.0" top="60.0" />
-               </StackPane.margin>
-            </Rectangle>
-            <FontAwesomeIconView fx:id="moveRectangleIcon" glyphName="ARROWS_V" mouseTransparent="true" scaleX="0.97" scaleY="0.75">
-               <StackPane.margin>
-                  <Insets bottom="1.0" right="15.0" top="62.0" />
-               </StackPane.margin>
-            </FontAwesomeIconView>
+            <StackPane maxHeight="15.0" maxWidth="15.0" minHeight="15.0" minWidth="15.0">
+               <children>
+                  <Rectangle fx:id="moveRectangle" fill="#dddddd" height="15.0" stroke="#a4a4a4" strokeType="INSIDE" width="15.0" />
+                  <FontAwesomeIconView fx:id="moveRectangleIcon" glyphName="ARROWS_V" mouseTransparent="true" scaleX="0.97" scaleY="0.75" />
+               </children>
+            </StackPane>
          </children>
       </StackPane>
       <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2">
